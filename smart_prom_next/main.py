@@ -16,18 +16,31 @@ from prometheus_client import Gauge, start_http_server
 from smart_prom_next import __version__
 
 
-GAUGES = {}
+GAUGES: Dict[str, Gauge] = {}
+TEMPERATURE_GAUGE = Gauge(
+    "smart_prom_temperature",
+    "The temperature of a particular type.",
+    ["device", "type", "model", "serial", "temperature_type"],
+)
 
 
 def add_and_set_gauge(name: str, documentation: str, labels: Dict[str, str], value: float):
     """Add and set new Gauge."""
     if name not in GAUGES:
-        print(f"Add new Gauge. name: {name}")
+        print(f"Add new gauge. name: {name}")
         gauge = Gauge(f"smart_prom_{name}", documentation, ["device", "type", "model", "serial"])
         GAUGES[name] = gauge
 
     gauge = GAUGES[name]
     gauge.labels(**labels).set(value)
+
+
+def normalize_str(the_str) -> str:
+    """Normalize a string.
+
+    This is useful to prepare Prometheus labels.
+    """
+    return the_str.strip().lower()
 
 
 def call_smartctl(options: List[str]):
@@ -82,12 +95,10 @@ def read_device_info_json(device_name: str):
 def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape SMART status."""
     smart_status = device_info.get("smart_status", None)
-    if smart_status is not None and isinstance(smart_status, dict):  # TODO: add warning when else?
+    if isinstance(smart_status, dict):  # TODO: add warning when else?
         smart_status_passed = smart_status.get("passed", None)
         print("smart_status_passed", smart_status_passed)  # TODO: delete me later
-        if smart_status_passed is not None and isinstance(
-            smart_status_passed, bool
-        ):  # TODO: add warning when else?
+        if isinstance(smart_status_passed, bool):  # TODO: add warning when else?
             smart_status_failed_value = 0 if smart_status_passed else 1
             print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
 
@@ -103,17 +114,12 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
     print("temperature:", temperature)  # TODO: del me later
-    if temperature is not None and isinstance(temperature, dict):
-        current_temperature = temperature.get("current", None)
-        print("current_temperature:", current_temperature)  # TODO: del me later
-        if current_temperature is not None and isinstance(current_temperature, int):
-
-            add_and_set_gauge(
-                "current_temperature",
-                "current temperature",
-                labels=labels,
-                value=current_temperature,
-            )
+    if isinstance(temperature, dict):
+        for temperature_type, temperature_value in temperature.items():
+            if isinstance(temperature_type, str) and isinstance(temperature_value, int):
+                temperature_labels = labels.copy()  # copy so we do not change labels
+                temperature_labels["temperature_type"] = normalize_str(temperature_type)
+                TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)
 
 
 def scrape_nvme_metrics(device_name: str, device_type: str, device_info_json: str):
@@ -146,7 +152,7 @@ def refresh_metrics():
     print("devices:", devices)  # TODO: delete me later
     for device in devices:
         device_name = device.get("name", None)
-        if device_name is not None and isinstance(device_name, str) and len(device_name) > 0:
+        if isinstance(device_name, str) and len(device_name) > 0:
             device_info_json = read_device_info_json(device_name)
             device_type = device.get("type", None)
             if device_type == "nvme":

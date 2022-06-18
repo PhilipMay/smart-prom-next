@@ -19,7 +19,13 @@ from smart_prom_next import __version__
 SMART_STATUS_FAILED_GAUGE = Gauge(
     "smart_prom_smart_status_failed",
     "1 if SMART status check failed, otherwise 0",
-    ["device_name", "model_name", "serial_number"],
+    ["device", "model", "serial"],
+)
+
+SMART_TEMPERATURE_GAUGE = Gauge(
+    "smart_prom_temperature",
+    "current temperature",
+    ["device", "model", "serial"],
 )
 
 
@@ -87,8 +93,23 @@ def scrape_smart_status(
             print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
 
             SMART_STATUS_FAILED_GAUGE.labels(
-                device_name=device_name, model_name=model_name, serial_number=serial_number
+                device=device_name, model=model_name, serial=serial_number
             ).set(smart_status_failed_value)
+
+
+def scrape_temperature(
+    device_name: str, device_info: Dict[str, Any], model_name: str, serial_number: str
+):
+    """Scrape temperature status."""
+    temperature = device_info.get("temperature", None)
+    print("temperature:", temperature)  # TODO: del me later
+    if temperature is not None and isinstance(temperature, dict):
+        current_temperature = temperature.get("current", None)
+        print("current_temperature:", current_temperature)  # TODO: del me later
+        if current_temperature is not None and isinstance(current_temperature, int):
+            SMART_TEMPERATURE_GAUGE.labels(
+                device=device_name, model=model_name, serial=serial_number
+            ).set(current_temperature)
 
 
 def scrape_nvme_metrics(device_name: str, device_info_json: str):
@@ -99,6 +120,12 @@ def scrape_nvme_metrics(device_name: str, device_info_json: str):
     serial_number = device_info.get("serial_number", "unknown serial number")
 
     scrape_smart_status(
+        device_name=device_name,
+        device_info=device_info,
+        model_name=model_name,
+        serial_number=serial_number,
+    )
+    scrape_temperature(
         device_name=device_name,
         device_info=device_info,
         model_name=model_name,

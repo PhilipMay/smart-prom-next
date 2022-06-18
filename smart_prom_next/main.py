@@ -83,6 +83,7 @@ def scan_devices() -> List[Dict[str, str]]:
     results_json = call_smartctl(["--scan-open", "--json"])
     results = json.loads(results_json)
     devices = results.get("devices", [])
+    assert isinstance(devices, list)
     return devices
 
 
@@ -122,8 +123,8 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
                 TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)
 
 
-def scrape_nvme_metrics(device_name: str, device_type: str, device_info_json: str):
-    """Scrape metrics for nvme device."""
+def scrape_metrics_for_device(device_name: str, device_type: str, device_info_json: str):
+    """Scrape metrics for given device."""
     device_info = json.loads(device_info_json)
 
     model_name = device_info.get("model_name", "unknown model name")
@@ -156,7 +157,7 @@ def refresh_metrics():
             device_info_json = read_device_info_json(device_name)
             device_type = device.get("type", None)
             if device_type == "nvme":
-                scrape_nvme_metrics(device_name, device_type, device_info_json)
+                scrape_metrics_for_device(device_name, device_type, device_info_json)
             else:
                 pass
                 # TODO: should we handle this?

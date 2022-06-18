@@ -1,0 +1,32 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      3
+    ],
+    "svn_revision": "5338",
+    "platform_info": "x86_64-linux-5.18.2-arch1-1",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "-x",
+      "--json",
+      "/dev/nvme0"
+    ],
+    "messages": [
+      {
+        "string": "Smartctl open device: /dev/nvme0 failed: Permission denied",
+        "severity": "error"
+      }
+    ],
+    "exit_status": 2
+  },
+  "local_time": {
+    "time_t": 1655567750,
+    "asctime": "Sat Jun 18 17:55:50 2022 CEST"
+  }
+}

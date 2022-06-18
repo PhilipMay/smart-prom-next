@@ -1,0 +1,30 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      3
+    ],
+    "svn_revision": "5338",
+    "platform_info": "x86_64-linux-5.18.2-arch1-1",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "--scan-open",
+      "--json"
+    ],
+    "exit_status": 0
+  },
+  "devices": [
+    {
+      "name": "/dev/nvme0",
+      "info_name": "/dev/nvme0",
+      "type": "nvme",
+      "protocol": "NVMe",
+      "open_error": "Permission denied"
+    }
+  ]
+}

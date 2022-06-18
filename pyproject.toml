@@ -23,4 +23,5 @@ disable = [
     "too-few-public-methods",
     "arguments-differ",
     "consider-using-f-string",
+    "too-many-nested-blocks",
 ]

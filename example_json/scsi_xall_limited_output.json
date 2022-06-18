@@ -1,0 +1,51 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      2
+    ],
+    "svn_revision": "5155",
+    "platform_info": "x86_64-linux-5.10.0-15-amd64",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "-x",
+      "--json",
+      "/dev/sda"
+    ],
+    "exit_status": 4
+  },
+  "device": {
+    "name": "/dev/sda",
+    "info_name": "/dev/sda",
+    "type": "scsi",
+    "protocol": "SCSI"
+  },
+  "vendor": "QEMU",
+  "product": "QEMU HARDDISK",
+  "model_name": "QEMU QEMU HARDDISK",
+  "revision": "2.5+",
+  "scsi_version": "SPC-3",
+  "user_capacity": {
+    "blocks": 320004096,
+    "bytes": 163842097152
+  },
+  "logical_block_size": 512,
+  "rotation_rate": 0,
+  "device_type": {
+    "scsi_value": 0,
+    "name": "disk"
+  },
+  "local_time": {
+    "time_t": 1655572380,
+    "asctime": "Sat Jun 18 19:13:00 2022 CEST"
+  },
+  "temperature": {
+    "current": 0,
+    "drive_trip": 0
+  }
+}

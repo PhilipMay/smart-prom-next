@@ -1,0 +1,51 @@
+name: Static Code Checks
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # at 4 am
+    - cron:  '0 4 * * *'
+
+jobs:
+  checks:
+    env:
+      src: "smart_prom_next"
+      other-src: "tests setup.py"
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install
+      run: |
+        python -m pip install -U pip
+        pip install --progress-bar off -U .[checking]
+
+    - name: Check with pydocstyle
+      run: pydocstyle --count ${{ env.src }} ${{ env.other-src }}
+
+    - name: Check with black
+      run: black ${{ env.src }} ${{ env.other-src }} --check --diff
+
+    - name: Check with flake8
+      run: flake8 ${{ env.src }} ${{ env.other-src }}
+
+    - name: Check with isort
+      run: isort ${{ env.src }} ${{ env.other-src }} --check --diff
+
+    - name: Check with mdformat
+      run: mdformat --check *.md
+
+    - name: Check with mypy
+      run: mypy --install-types --non-interactive ${{ env.src }} ${{ env.other-src }}
+
+    - name: Check with pylint
+      run: pylint ${{ env.src }}

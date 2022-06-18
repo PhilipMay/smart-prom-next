@@ -3,8 +3,11 @@
 # which is available at https://opensource.org/licenses/MIT
 
 
+from smart_prom_next import __version__
+
+
 def main():
-    print("start smart-prom-next")  # TODO: add version info from __init__.py
+    print(f"start smart-prom-next version: {__version__}")
 
 
 if __name__ == "__main__":

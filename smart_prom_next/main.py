@@ -4,8 +4,12 @@
 
 """smart-prom-next main module."""
 import json
+import os
+import time
 from subprocess import PIPE, Popen
 from typing import List
+
+from prometheus_client import start_http_server
 
 from smart_prom_next import __version__
 
@@ -48,11 +52,25 @@ def scan_devices():
     return devices
 
 
-def main():
-    """Main function."""
-    print(f"start smart-prom-next version: {__version__}")
+def refresh_metrics():
     devices = scan_devices()
     print("devices:", devices)
+
+
+def main():
+    """Main function."""
+    print(f"Start smart-prom-next. version: {__version__}")
+
+    prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
+    print(f"Start prometheus client. port: {prometheus_client_port}")
+    start_http_server(prometheus_client_port)
+
+    smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
+    print(f"Enter metrics refresh loop. smart_info_refresh_interval: {smart_info_refresh_interval}")
+
+    while True:
+        refresh_metrics()
+        time.sleep(smart_info_refresh_interval)
 
 
 if __name__ == "__main__":

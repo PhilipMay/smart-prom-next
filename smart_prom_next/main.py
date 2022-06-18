@@ -3,15 +3,24 @@
 # which is available at https://opensource.org/licenses/MIT
 
 """smart-prom-next main module."""
+
 import json
 import os
+import sys
 import time
 from subprocess import PIPE, Popen
-from typing import List
+from typing import Dict, List
 
-from prometheus_client import start_http_server
+from prometheus_client import Gauge, start_http_server
 
 from smart_prom_next import __version__
+
+
+SMART_STATUS_FAILED_GAUGE = Gauge(
+    "smart_prom_smart_status_failed",
+    "1 if SMART status check failed, otherwise 0",
+    ["device_name", "model_name", "serial_number"],
+)
 
 
 def call_smartctl(options: List[str]):
@@ -31,30 +40,75 @@ def call_smartctl(options: List[str]):
                 error_text = (
                     f"Error calling {args}! returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )
-                print(error_text)
+                print(error_text, file=sys.stderr)
                 raise Exception(error_text)
 
     except FileNotFoundError:
         print(
             "The smartctl program cannot be found. "
-            "Maybe smartctl (smartmontools) still needs to be installed."
+            "Maybe smartctl (smartmontools) still needs to be installed.",
+            file=sys.stderr,
         )
         raise
 
     return stdout.decode("utf-8")
 
 
-def scan_devices():
-    """Return relevant devices."""
+def scan_devices() -> List[Dict[str, str]]:
+    """Return relevant devices.
+
+    Returns:
+        The ``name`` key contains the device name.
+    """
     results_json = call_smartctl(["--scan-open", "--json"])
     results = json.loads(results_json)
     devices = results.get("devices", [])
     return devices
 
 
+def read_device_info_json(device_name: str):
+    """Read SMART info from device."""
+    device_info_json = call_smartctl(["--xall", "--json", device_name])
+    return device_info_json
+
+
+def scrape_nvme_metrics(device_name: str, device_info_json: str):
+    """Scrape metrics for nvme device."""
+    device_info = json.loads(device_info_json)
+    print("device_info:", device_info)  # TODO: delete me later
+
+    model_name = device_info.get("model_name", "unknown model name")
+    serial_number = device_info.get("serial_number", "unknown serial number")
+
+    smart_status = device_info.get("smart_status", None)
+    smart_status_passed = smart_status.get("passed", True)
+    assert isinstance(smart_status_passed, bool)
+    smart_status_failed_value = 0 if smart_status_passed else 1
+
+    print("model_name", model_name)
+    print("serial_number", serial_number)
+    print("smart_status_passed", smart_status_passed)
+    print("smart_status_failed_value", smart_status_failed_value)
+
+    SMART_STATUS_FAILED_GAUGE.labels(
+        device_name=device_name, model_name=model_name, serial_number=serial_number
+    ).set(smart_status_failed_value)
+
+
 def refresh_metrics():
+    """Refresh the metrics."""
     devices = scan_devices()
-    print("devices:", devices)
+    print("devices:", devices)  # TODO: delete me later
+    for device in devices:
+        device_name = device.get("name", None)
+        if device_name is not None and isinstance(device_name, str) and len(device_name) > 0:
+            device_info_json = read_device_info_json(device_name)
+            device_type = device.get("type", None)
+            if device_type == "nvme":
+                scrape_nvme_metrics(device_name, device_info_json)
+            else:
+                pass
+                # TODO: should we handle this?
 
 
 def main():
@@ -66,7 +120,9 @@ def main():
     start_http_server(prometheus_client_port)
 
     smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
-    print(f"Enter metrics refresh loop. smart_info_refresh_interval: {smart_info_refresh_interval}")
+    print(
+        f"Enter metrics refresh loop. smart_info_refresh_interval: {smart_info_refresh_interval}"
+    )
 
     while True:
         refresh_metrics()

@@ -1,0 +1,114 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      3
+    ],
+    "svn_revision": "5338",
+    "platform_info": "x86_64-linux-5.18.2-arch1-1",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "-x",
+      "--json",
+      "/dev/nvme0"
+    ],
+    "exit_status": 0
+  },
+  "local_time": {
+    "time_t": 1655567945,
+    "asctime": "Sat Jun 18 17:59:05 2022 CEST"
+  },
+  "device": {
+    "name": "/dev/nvme0",
+    "info_name": "/dev/nvme0",
+    "type": "nvme",
+    "protocol": "NVMe"
+  },
+  "model_name": "KXG6AZNV512G TOSHIBA",
+  "serial_number": "Y9SF71LHFWZL",
+  "firmware_version": "5108AGLA",
+  "nvme_pci_vendor": {
+    "id": 4473,
+    "subsystem_id": 4473
+  },
+  "nvme_ieee_oui_identifier": 9233294,
+  "nvme_total_capacity": 512110190592,
+  "nvme_unallocated_capacity": 0,
+  "nvme_controller_id": 0,
+  "nvme_version": {
+    "string": "1.3",
+    "value": 66304
+  },
+  "nvme_number_of_namespaces": 1,
+  "nvme_namespaces": [
+    {
+      "id": 1,
+      "size": {
+        "blocks": 1000215216,
+        "bytes": 512110190592
+      },
+      "capacity": {
+        "blocks": 1000215216,
+        "bytes": 512110190592
+      },
+      "utilization": {
+        "blocks": 1000215216,
+        "bytes": 512110190592
+      },
+      "formatted_lba_size": 512,
+      "eui64": {
+        "oui": 9233294,
+        "ext_id": 21476127755
+      }
+    }
+  ],
+  "user_capacity": {
+    "blocks": 1000215216,
+    "bytes": 512110190592
+  },
+  "logical_block_size": 512,
+  "smart_support": {
+    "available": true,
+    "enabled": true
+  },
+  "smart_status": {
+    "passed": true,
+    "nvme": {
+      "value": 0
+    }
+  },
+  "nvme_smart_health_information_log": {
+    "critical_warning": 0,
+    "temperature": 35,
+    "available_spare": 100,
+    "available_spare_threshold": 10,
+    "percentage_used": 3,
+    "data_units_read": 11686529,
+    "data_units_written": 13927418,
+    "host_reads": 340880444,
+    "host_writes": 180419925,
+    "controller_busy_time": 391,
+    "power_cycles": 3021,
+    "power_on_hours": 1767,
+    "unsafe_shutdowns": 132,
+    "media_errors": 0,
+    "num_err_log_entries": 0,
+    "warning_temp_time": 0,
+    "critical_comp_time": 0,
+    "temperature_sensors": [
+      35
+    ]
+  },
+  "temperature": {
+    "current": 35
+  },
+  "power_cycle_count": 3021,
+  "power_on_time": {
+    "hours": 1767
+  }
+}

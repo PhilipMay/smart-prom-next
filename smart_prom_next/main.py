@@ -16,23 +16,17 @@ from prometheus_client import Gauge, start_http_server
 from smart_prom_next import __version__
 
 
-GAUGES: Dict[str, Gauge] = {}
 TEMPERATURE_GAUGE = Gauge(
     "smart_prom_temperature",
     "The temperature of a particular type.",
     ["device", "type", "model", "serial", "temperature_type"],
 )
 
-
-def add_and_set_gauge(name: str, documentation: str, labels: Dict[str, str], value: float):
-    """Add and set new Gauge."""
-    if name not in GAUGES:
-        print(f"Add new gauge. name: {name}")
-        gauge = Gauge(f"smart_prom_{name}", documentation, ["device", "type", "model", "serial"])
-        GAUGES[name] = gauge
-
-    gauge = GAUGES[name]
-    gauge.labels(**labels).set(value)
+SMART_STATUS_FAILED_GAUGE = Gauge(
+    "smart_prom_smart_status_failed",
+    "1 if SMART status check failed, otherwise 0",
+    ["device", "type", "model", "serial"],
+)
 
 
 def normalize_str(the_str) -> str:
@@ -102,13 +96,7 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
         if isinstance(smart_status_passed, bool):  # TODO: add warning when else?
             smart_status_failed_value = 0 if smart_status_passed else 1
             print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
-
-            add_and_set_gauge(
-                "smart_status_failed",
-                "1 if SMART status check failed, otherwise 0",
-                labels=labels,
-                value=smart_status_failed_value,
-            )
+            SMART_STATUS_FAILED_GAUGE.labels(**labels).set(smart_status_failed_value)
 
 
 def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
@@ -117,7 +105,9 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
     print("temperature:", temperature)  # TODO: del me later
     if isinstance(temperature, dict):  # TODO: what is not?
         for temperature_type, temperature_value in temperature.items():
-            if isinstance(temperature_type, str) and isinstance(temperature_value, int):  # TODO: what is not?
+            if isinstance(temperature_type, str) and isinstance(
+                temperature_value, int
+            ):  # TODO: what is not?
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
                 TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)

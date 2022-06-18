@@ -19,7 +19,7 @@ from smart_prom_next import __version__
 GAUGES = {}
 
 
-def add_and_set_gauge(name: str, documentation: str, tags: Dict[str, str], value: float):
+def add_and_set_gauge(name: str, documentation: str, labels: Dict[str, str], value: float):
     """Add and set new Gauge."""
     if name not in GAUGES:
         print(f"Add new Gauge. name: {name}")
@@ -27,7 +27,7 @@ def add_and_set_gauge(name: str, documentation: str, tags: Dict[str, str], value
         GAUGES[name] = gauge
 
     gauge = GAUGES[name]
-    gauge.labels(**tags).set(value)
+    gauge.labels(**labels).set(value)
 
 
 def call_smartctl(options: List[str]):
@@ -79,7 +79,7 @@ def read_device_info_json(device_name: str):
     return device_info_json
 
 
-def scrape_smart_status(device_info: Dict[str, Any], tags: Dict[str, str]):
+def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape SMART status."""
     smart_status = device_info.get("smart_status", None)
     if smart_status is not None and isinstance(smart_status, dict):  # TODO: add warning when else?
@@ -94,12 +94,12 @@ def scrape_smart_status(device_info: Dict[str, Any], tags: Dict[str, str]):
             add_and_set_gauge(
                 "smart_status_failed",
                 "1 if SMART status check failed, otherwise 0",
-                tags=tags,
+                labels=labels,
                 value=smart_status_failed_value,
             )
 
 
-def scrape_temperature(device_info: Dict[str, Any], tags: Dict[str, str]):
+def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
     print("temperature:", temperature)  # TODO: del me later
@@ -111,7 +111,7 @@ def scrape_temperature(device_info: Dict[str, Any], tags: Dict[str, str]):
             add_and_set_gauge(
                 "current_temperature",
                 "current temperature",
-                tags=tags,
+                labels=labels,
                 value=current_temperature,
             )
 
@@ -123,7 +123,7 @@ def scrape_nvme_metrics(device_name: str, device_type: str, device_info_json: st
     model_name = device_info.get("model_name", "unknown model name")
     serial_number = device_info.get("serial_number", "unknown serial number")
 
-    tags = {
+    labels = {
         "device": device_name,
         "type": device_type,
         "model": model_name,
@@ -132,11 +132,11 @@ def scrape_nvme_metrics(device_name: str, device_type: str, device_info_json: st
 
     scrape_smart_status(
         device_info=device_info,
-        tags=tags,
+        labels=labels,
     )
     scrape_temperature(
         device_info=device_info,
-        tags=tags,
+        labels=labels,
     )
 
 

@@ -28,6 +28,12 @@ SMART_STATUS_FAILED_GAUGE = Gauge(
     ["device", "type", "model", "serial"],
 )
 
+NVME_SMART_INFO_GAUGE = Gauge(
+    "smart_prom_nvme_smart_info",
+    "nvme SMART health information log",
+    ["device", "type", "model", "serial", "info_type"],
+)
+
 
 def normalize_str(the_str) -> str:
     """Normalize a string.
@@ -113,6 +119,28 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
                 TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)
 
 
+def scrape_metrics_for_nvme_device(device_info: Dict[str, Any], labels: Dict[str, str]):
+    """Scrape nvme specific info."""
+    nvme_smart_info = device_info.get("nvme_smart_health_information_log", None)
+    if isinstance(nvme_smart_info, dict):
+        for smart_key, smart_value in nvme_smart_info.items():
+            smart_key = normalize_str(smart_key)
+            if isinstance(smart_key, str):
+                if smart_key == "temperature_sensors":
+                    if isinstance(smart_value, list):
+                        for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):
+                            smart_info_labels = labels.copy()
+                            smart_info_labels["info_type"] = f"{smart_key}_{temp_sensor_nr}"
+                            NVME_SMART_INFO_GAUGE.labels(**smart_info_labels).set(
+                                temp_sensor_value
+                            )
+                else:
+                    if isinstance(smart_value, int):
+                        smart_info_labels = labels.copy()
+                        smart_info_labels["info_type"] = smart_key
+                        NVME_SMART_INFO_GAUGE.labels(**smart_info_labels).set(smart_value)
+
+
 def scrape_metrics_for_device(device_name: str, device_type: str, device_info_json: str):
     """Scrape metrics for given device."""
     device_info = json.loads(device_info_json)
@@ -135,6 +163,12 @@ def scrape_metrics_for_device(device_name: str, device_type: str, device_info_js
         device_info=device_info,
         labels=labels,
     )
+
+    if device_type == "nvme":
+        scrape_metrics_for_nvme_device(
+            device_info=device_info,
+            labels=labels,
+        )
 
 
 def refresh_metrics():

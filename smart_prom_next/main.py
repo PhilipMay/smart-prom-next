@@ -16,17 +16,18 @@ from prometheus_client import Gauge, start_http_server
 from smart_prom_next import __version__
 
 
-SMART_STATUS_FAILED_GAUGE = Gauge(
-    "smart_prom_smart_status_failed",
-    "1 if SMART status check failed, otherwise 0",
-    ["device", "model", "serial"],
-)
+GAUGES = {}
 
-SMART_TEMPERATURE_GAUGE = Gauge(
-    "smart_prom_temperature",
-    "current temperature",
-    ["device", "model", "serial"],
-)
+
+def add_and_set_gauge(name: str, documentation: str, device, model, serial, value):
+    """Add and set new Gauge."""
+    if name not in GAUGES:
+        print(f"Add new Gauge. name: {name}")
+        gauge = Gauge(f"smart_prom_{name}", documentation, ["device", "model", "serial"])
+        GAUGES[name] = gauge
+
+    gauge = GAUGES[name]
+    gauge.labels(device=device, model=model, serial=serial).set(value)
 
 
 def call_smartctl(options: List[str]):
@@ -92,9 +93,14 @@ def scrape_smart_status(
             smart_status_failed_value = 0 if smart_status_passed else 1
             print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
 
-            SMART_STATUS_FAILED_GAUGE.labels(
-                device=device_name, model=model_name, serial=serial_number
-            ).set(smart_status_failed_value)
+            add_and_set_gauge(
+                "smart_status_failed",
+                "1 if SMART status check failed, otherwise 0",
+                device=device_name,
+                model=model_name,
+                serial=serial_number,
+                value=smart_status_failed_value,
+            )
 
 
 def scrape_temperature(
@@ -107,9 +113,15 @@ def scrape_temperature(
         current_temperature = temperature.get("current", None)
         print("current_temperature:", current_temperature)  # TODO: del me later
         if current_temperature is not None and isinstance(current_temperature, int):
-            SMART_TEMPERATURE_GAUGE.labels(
-                device=device_name, model=model_name, serial=serial_number
-            ).set(current_temperature)
+
+            add_and_set_gauge(
+                "temperature",
+                "current temperature",
+                device=device_name,
+                model=model_name,
+                serial=serial_number,
+                value=current_temperature,
+            )
 
 
 def scrape_nvme_metrics(device_name: str, device_info_json: str):

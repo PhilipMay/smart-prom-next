@@ -78,21 +78,21 @@ def scrape_nvme_metrics(device_name: str, device_info_json: str):
     print("device_info:", device_info)  # TODO: delete me later
 
     model_name = device_info.get("model_name", "unknown model name")
+    print("model_name", model_name)  # TODO: delete me later
     serial_number = device_info.get("serial_number", "unknown serial number")
+    print("serial_number", serial_number)  # TODO: delete me later
 
     smart_status = device_info.get("smart_status", None)
-    smart_status_passed = smart_status.get("passed", True)
-    assert isinstance(smart_status_passed, bool)
-    smart_status_failed_value = 0 if smart_status_passed else 1
+    if smart_status is not None and isinstance(smart_status, dict):  # TODO: add warning when else?
+        smart_status_passed = smart_status.get("passed", None)
+        print("smart_status_passed", smart_status_passed)  # TODO: delete me later
+        if smart_status_passed is not None and isinstance(smart_status_passed, bool):  # TODO: add warning when else?
+            smart_status_failed_value = 0 if smart_status_passed else 1
+            print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
 
-    print("model_name", model_name)
-    print("serial_number", serial_number)
-    print("smart_status_passed", smart_status_passed)
-    print("smart_status_failed_value", smart_status_failed_value)
-
-    SMART_STATUS_FAILED_GAUGE.labels(
-        device_name=device_name, model_name=model_name, serial_number=serial_number
-    ).set(smart_status_failed_value)
+            SMART_STATUS_FAILED_GAUGE.labels(
+                device_name=device_name, model_name=model_name, serial_number=serial_number
+            ).set(smart_status_failed_value)
 
 
 def refresh_metrics():

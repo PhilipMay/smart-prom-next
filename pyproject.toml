@@ -1,0 +1,26 @@
+[tool.black]
+line-length = 99
+target-version = ["py36"]
+
+[tool.isort]
+profile = "black"
+lines_after_imports = 2
+line_length = 99
+
+[tool.pylint."MASTER"]
+load-plugins = "pylintfileheader"
+file-header = "(# Copyright \\(c\\) \\d{4} .*\\n)*# This software is distributed under the terms of the MIT license\\n# which is available at https://opensource.org/licenses/MIT\\n\\n"
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "too-many-arguments",
+    "invalid-name",
+    "line-too-long",  # checked by flake8
+    "fixme",
+    "too-many-instance-attributes",
+    "protected-access",
+    "broad-except",
+    "too-few-public-methods",
+    "arguments-differ",
+    "consider-using-f-string",
+]

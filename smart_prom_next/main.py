@@ -9,7 +9,7 @@ import os
 import sys
 import time
 from subprocess import PIPE, Popen
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from prometheus_client import Gauge, start_http_server
 
@@ -72,27 +72,38 @@ def read_device_info_json(device_name: str):
     return device_info_json
 
 
-def scrape_nvme_metrics(device_name: str, device_info_json: str):
-    """Scrape metrics for nvme device."""
-    device_info = json.loads(device_info_json)
-    print("device_info:", device_info)  # TODO: delete me later
-
-    model_name = device_info.get("model_name", "unknown model name")
-    print("model_name", model_name)  # TODO: delete me later
-    serial_number = device_info.get("serial_number", "unknown serial number")
-    print("serial_number", serial_number)  # TODO: delete me later
-
+def scrape_smart_status(
+    device_name: str, device_info: Dict[str, Any], model_name: str, serial_number: str
+):
+    """Scrape SMART status."""
     smart_status = device_info.get("smart_status", None)
     if smart_status is not None and isinstance(smart_status, dict):  # TODO: add warning when else?
         smart_status_passed = smart_status.get("passed", None)
         print("smart_status_passed", smart_status_passed)  # TODO: delete me later
-        if smart_status_passed is not None and isinstance(smart_status_passed, bool):  # TODO: add warning when else?
+        if smart_status_passed is not None and isinstance(
+            smart_status_passed, bool
+        ):  # TODO: add warning when else?
             smart_status_failed_value = 0 if smart_status_passed else 1
             print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
 
             SMART_STATUS_FAILED_GAUGE.labels(
                 device_name=device_name, model_name=model_name, serial_number=serial_number
             ).set(smart_status_failed_value)
+
+
+def scrape_nvme_metrics(device_name: str, device_info_json: str):
+    """Scrape metrics for nvme device."""
+    device_info = json.loads(device_info_json)
+
+    model_name = device_info.get("model_name", "unknown model name")
+    serial_number = device_info.get("serial_number", "unknown serial number")
+
+    scrape_smart_status(
+        device_name=device_name,
+        device_info=device_info,
+        model_name=model_name,
+        serial_number=serial_number,
+    )
 
 
 def refresh_metrics():

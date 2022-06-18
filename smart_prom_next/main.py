@@ -115,9 +115,9 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
     print("temperature:", temperature)  # TODO: del me later
-    if isinstance(temperature, dict):
+    if isinstance(temperature, dict):  # TODO: what is not?
         for temperature_type, temperature_value in temperature.items():
-            if isinstance(temperature_type, str) and isinstance(temperature_value, int):
+            if isinstance(temperature_type, str) and isinstance(temperature_value, int):  # TODO: what is not?
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
                 TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)
@@ -127,8 +127,8 @@ def scrape_metrics_for_device(device_name: str, device_type: str, device_info_js
     """Scrape metrics for given device."""
     device_info = json.loads(device_info_json)
 
-    model_name = device_info.get("model_name", "unknown model name")
-    serial_number = device_info.get("serial_number", "unknown serial number")
+    model_name = device_info.get("model_name", "unknown")
+    serial_number = device_info.get("serial_number", "unknown")
 
     labels = {
         "device": device_name,
@@ -153,14 +153,11 @@ def refresh_metrics():
     print("devices:", devices)  # TODO: delete me later
     for device in devices:
         device_name = device.get("name", None)
-        if isinstance(device_name, str) and len(device_name) > 0:
+        if isinstance(device_name, str) and len(device_name) > 0:  # TODO: what is not?
             device_info_json = read_device_info_json(device_name)
             device_type = device.get("type", None)
-            if device_type == "nvme":
+            if isinstance(device_type, str):  # TODO: what is not?
                 scrape_metrics_for_device(device_name, device_type, device_info_json)
-            else:
-                pass
-                # TODO: should we handle this?
 
 
 def main():

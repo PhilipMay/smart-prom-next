@@ -1,0 +1,8 @@
+examples
+.git
+.github
+.gitignore
+.mypy_cache
+.pytest_cache
+*.egg-info
+tests

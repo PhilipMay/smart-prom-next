@@ -121,7 +121,7 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
                 return result, returncode
             else:
                 raise Exception(
-                    f"Calling {args} resurned no result! "
+                    f"Calling {args} resturned no result! "
                     f"returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )
 
@@ -152,17 +152,14 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
     smart_status = device_info.get("smart_status", None)
     if isinstance(smart_status, dict):  # TODO: add warning when else?
         smart_status_passed = smart_status.get("passed", None)
-        print("smart_status_passed", smart_status_passed)  # TODO: delete me later
         if isinstance(smart_status_passed, bool):  # TODO: add warning when else?
             smart_status_failed_value = 0 if smart_status_passed else 1
-            print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
             get_smart_status_failed_gauge().labels(**labels).set(smart_status_failed_value)
 
 
 def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
-    print("temperature:", temperature)  # TODO: del me later
     if isinstance(temperature, dict):  # TODO: what is not?
         for temperature_type, temperature_value in temperature.items():
             if isinstance(temperature_type, str) and isinstance(
@@ -280,7 +277,6 @@ def scrape_metrics_for_device(
 def refresh_metrics():
     """Refresh the metrics."""
     devices = scan_devices()
-    print("devices:", devices)  # TODO: delete me later
     for device in devices:
         device_name = device.get("name", None)
         if isinstance(device_name, str) and len(device_name) > 0:  # TODO: what is not?

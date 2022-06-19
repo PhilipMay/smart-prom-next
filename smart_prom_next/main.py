@@ -13,8 +13,6 @@ from typing import Any, Dict, List
 
 from prometheus_client import Gauge, start_http_server
 
-from smart_prom_next import __version__
-
 
 TEMPERATURE_GAUGE = Gauge(
     "smart_prom_temperature",
@@ -249,7 +247,7 @@ def refresh_metrics():
 
 def main():
     """Main function."""
-    print(f"Start smart-prom-next. version: {__version__}")
+    print("Start smart-prom-next.")  # TODO: add version info when pip package available
 
     prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
     print(f"Start prometheus client. port: {prometheus_client_port}")

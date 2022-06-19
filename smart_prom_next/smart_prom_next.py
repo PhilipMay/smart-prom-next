@@ -59,7 +59,12 @@ def call_smartctl(options: List[str]):
             # see EXIT STATUS in
             # https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in
 
-            if popen.returncode != 0:
+            returncode = popen.returncode
+            result = None
+            if stdout is not None:
+                result = stdout.decode("utf-8")
+
+            if returncode != 0:
                 stderr_text = (
                     stderr.decode("utf-8")
                     if (stderr is not None and stderr.decode("utf-8") != "")
@@ -70,6 +75,11 @@ def call_smartctl(options: List[str]):
                     f"returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )
 
+            if isinstance(result, str) and len(result) > 0:  # we have a result
+                return result
+            else:
+                raise Exception(f"Calling {args} resurned no result! returncode: {popen.returncode} stderr: '{stderr_text}'")
+
     except FileNotFoundError:
         print(
             "The smartctl program cannot be found. "
@@ -78,7 +88,6 @@ def call_smartctl(options: List[str]):
         )
         raise
 
-    return stdout.decode("utf-8")
 
 
 def scan_devices() -> List[Dict[str, str]]:

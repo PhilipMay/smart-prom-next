@@ -35,6 +35,13 @@ NVME_SMART_INFO_GAUGE = Gauge(
 )
 
 
+SAT_SMART_INFO_GAUGE = Gauge(
+    "smart_prom_nvme_smart_info",
+    "nvme SMART health information log",
+    ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
+)
+
+
 def normalize_str(the_str) -> str:
     """Normalize a string.
 
@@ -119,7 +126,7 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
                 TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)
 
 
-def scrape_metrics_for_nvme_device(device_info: Dict[str, Any], labels: Dict[str, str]):
+def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape nvme specific info."""
     nvme_smart_info = device_info.get("nvme_smart_health_information_log", None)
     if isinstance(nvme_smart_info, dict):
@@ -139,6 +146,50 @@ def scrape_metrics_for_nvme_device(device_info: Dict[str, Any], labels: Dict[str
                         smart_info_labels = labels.copy()
                         smart_info_labels["info_type"] = smart_key
                         NVME_SMART_INFO_GAUGE.labels(**smart_info_labels).set(smart_value)
+
+
+def scrape_sat_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
+    """Scrape sat specific info."""
+    sat_smart_info = device_info.get("ata_smart_attributes", None)
+    if isinstance(sat_smart_info, dict):
+        sat_smart_info_table = sat_smart_info.get("table", None)
+        if isinstance(sat_smart_info_table, list):
+            for smart_info_item in sat_smart_info_table:
+                if isinstance(smart_info_item, dict):
+                    _flags = smart_info_item.get("flags", None)
+                    if isinstance(_flags, dict):
+                        _updated_online = _flags.get("updated_online", None)
+
+                        # only read always updated / online info
+                        if isinstance(_updated_online, bool) and _updated_online:
+                            _id = smart_info_item.get("id", None)
+                            _name = smart_info_item.get("name", None)
+
+                            # id and name must be available
+                            if isinstance(_id, int) and isinstance(_name, str):
+                                sat_labels = labels.copy()
+                                sat_labels["attr_id"] = str(_id)
+                                sat_labels["attr_nme"] = _name
+
+                                # read value, worst and thresh
+                                for attr_type in ["value", "worst", "thresh"]:
+                                    _value = smart_info_item.get(attr_type, None)
+                                    if isinstance(_value, int):
+                                        SAT_SMART_INFO_GAUGE.labels(
+                                            **sat_labels, attr_type=attr_type
+                                        ).set(_value)
+
+                                # read raw value
+                                _raw = smart_info_item.get("raw", None)
+                                if isinstance(_raw, dict):
+                                    _value = _raw.get("value", None)
+                                    if isinstance(_value, int):
+                                        SAT_SMART_INFO_GAUGE.labels(
+                                            **sat_labels, attr_type="raw"
+                                        ).set(_value)
+
+                                # red when_failed
+                                # TODO: add impl
 
 
 def scrape_metrics_for_device(device_name: str, device_type: str, device_info_json: str):
@@ -163,12 +214,14 @@ def scrape_metrics_for_device(device_name: str, device_type: str, device_info_js
         device_info=device_info,
         labels=labels,
     )
-
-    if device_type == "nvme":
-        scrape_metrics_for_nvme_device(
-            device_info=device_info,
-            labels=labels,
-        )
+    scrape_nvme_metrics(
+        device_info=device_info,
+        labels=labels,
+    )
+    scrape_sat_metrics(
+        device_info=device_info,
+        labels=labels,
+    )
 
 
 def refresh_metrics():

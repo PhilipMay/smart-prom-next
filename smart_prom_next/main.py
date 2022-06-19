@@ -34,7 +34,6 @@ NVME_SMART_INFO_GAUGE = Gauge(
     ["device", "type", "model", "serial", "info_type"],
 )
 
-
 SMART_INFO_GAUGE = Gauge(
     "smart_prom_smart_info",
     "SMART health information log",
@@ -58,17 +57,20 @@ def call_smartctl(options: List[str]):
         with Popen(args, stdout=PIPE, stderr=PIPE) as popen:
             stdout, stderr = popen.communicate()
 
+            # returncode can be != 0 even if the command returned valid data
+            # see EXIT STATUS in
+            # https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in
+
             if popen.returncode != 0:
                 stderr_text = (
                     stderr.decode("utf-8")
                     if (stderr is not None and stderr.decode("utf-8") != "")
                     else "not set"
                 )
-                error_text = (
-                    f"Error calling {args}! returncode: {popen.returncode} stderr: '{stderr_text}'"
+                print(
+                    f"Calling {args} resturned non zero returncode! "
+                    f"returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )
-                print(error_text, file=sys.stderr)
-                raise Exception(error_text)
 
     except FileNotFoundError:
         print(
@@ -158,38 +160,46 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                 if isinstance(smart_info_item, dict):
                     _flags = smart_info_item.get("flags", None)
                     if isinstance(_flags, dict):
-                        _updated_online = _flags.get("updated_online", None)
+                        _id = smart_info_item.get("id", None)
+                        _name = smart_info_item.get("name", None)
 
-                        # only read always updated / online info
-                        if isinstance(_updated_online, bool) and _updated_online:
-                            _id = smart_info_item.get("id", None)
-                            _name = smart_info_item.get("name", None)
+                        # id and name must be available
+                        if isinstance(_id, int) and isinstance(_name, str):
+                            sat_labels = labels.copy()
+                            sat_labels["attr_id"] = str(_id)
+                            sat_labels["attr_name"] = _name
 
-                            # id and name must be available
-                            if isinstance(_id, int) and isinstance(_name, str):
-                                sat_labels = labels.copy()
-                                sat_labels["attr_id"] = str(_id)
-                                sat_labels["attr_name"] = _name
+                            # check when_failed
+                            _when_failed = smart_info_item.get("when_failed", None)
+                            if _when_failed is not None:
+                                # set now value:
+                                now_value = 1 if _when_failed == "now" else 0
+                                SMART_INFO_GAUGE.labels(**sat_labels, attr_type="failed_now").set(
+                                    now_value
+                                )
 
-                                # read value, worst and thresh
-                                for attr_type in ["value", "worst", "thresh"]:
-                                    _value = smart_info_item.get(attr_type, None)
-                                    if isinstance(_value, int):
-                                        SMART_INFO_GAUGE.labels(
-                                            **sat_labels, attr_type=attr_type
-                                        ).set(_value)
+                                # set past value:
+                                past_value = 1 if _when_failed == "past" else 0
+                                SMART_INFO_GAUGE.labels(**sat_labels, attr_type="failed_past").set(
+                                    past_value
+                                )
 
-                                # read raw value
-                                _raw = smart_info_item.get("raw", None)
-                                if isinstance(_raw, dict):
-                                    _value = _raw.get("value", None)
-                                    if isinstance(_value, int):
-                                        SMART_INFO_GAUGE.labels(
-                                            **sat_labels, attr_type="raw"
-                                        ).set(_value)
+                            # read value, worst and thresh
+                            for attr_type in ["value", "worst", "thresh"]:
+                                _value = smart_info_item.get(attr_type, None)
+                                if isinstance(_value, int):
+                                    SMART_INFO_GAUGE.labels(**sat_labels, attr_type=attr_type).set(
+                                        _value
+                                    )
 
-                                # red when_failed
-                                # TODO: add impl
+                            # read raw value
+                            _raw = smart_info_item.get("raw", None)
+                            if isinstance(_raw, dict):
+                                _value = _raw.get("value", None)
+                                if isinstance(_value, int):
+                                    SMART_INFO_GAUGE.labels(**sat_labels, attr_type="raw").set(
+                                        _value
+                                    )
 
 
 def scrape_metrics_for_device(device_name: str, device_type: str, device_info_json: str):

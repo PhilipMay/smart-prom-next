@@ -98,7 +98,7 @@ def scan_devices() -> List[Dict[str, str]]:
 
 def read_device_info_json(device_name: str):
     """Read SMART info from device."""
-    device_info_json = call_smartctl(["-a", "--json", device_name])
+    device_info_json = call_smartctl(["--xall", "--json", device_name])
     return device_info_json
 
 

@@ -35,9 +35,9 @@ NVME_SMART_INFO_GAUGE = Gauge(
 )
 
 
-SAT_SMART_INFO_GAUGE = Gauge(
-    "smart_prom_nvme_smart_info",
-    "nvme SMART health information log",
+SMART_INFO_GAUGE = Gauge(
+    "smart_prom_smart_info",
+    "SMART health information log",
     ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
 )
 
@@ -96,7 +96,7 @@ def scan_devices() -> List[Dict[str, str]]:
 
 def read_device_info_json(device_name: str):
     """Read SMART info from device."""
-    device_info_json = call_smartctl(["--xall", "--json", device_name])
+    device_info_json = call_smartctl(["-a", "--json", device_name])
     return device_info_json
 
 
@@ -148,7 +148,7 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                         NVME_SMART_INFO_GAUGE.labels(**smart_info_labels).set(smart_value)
 
 
-def scrape_sat_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
+def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
     """Scrape sat specific info."""
     sat_smart_info = device_info.get("ata_smart_attributes", None)
     if isinstance(sat_smart_info, dict):
@@ -169,13 +169,13 @@ def scrape_sat_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                             if isinstance(_id, int) and isinstance(_name, str):
                                 sat_labels = labels.copy()
                                 sat_labels["attr_id"] = str(_id)
-                                sat_labels["attr_nme"] = _name
+                                sat_labels["attr_name"] = _name
 
                                 # read value, worst and thresh
                                 for attr_type in ["value", "worst", "thresh"]:
                                     _value = smart_info_item.get(attr_type, None)
                                     if isinstance(_value, int):
-                                        SAT_SMART_INFO_GAUGE.labels(
+                                        SMART_INFO_GAUGE.labels(
                                             **sat_labels, attr_type=attr_type
                                         ).set(_value)
 
@@ -184,7 +184,7 @@ def scrape_sat_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                                 if isinstance(_raw, dict):
                                     _value = _raw.get("value", None)
                                     if isinstance(_value, int):
-                                        SAT_SMART_INFO_GAUGE.labels(
+                                        SMART_INFO_GAUGE.labels(
                                             **sat_labels, attr_type="raw"
                                         ).set(_value)
 
@@ -218,7 +218,7 @@ def scrape_metrics_for_device(device_name: str, device_type: str, device_info_js
         device_info=device_info,
         labels=labels,
     )
-    scrape_sat_metrics(
+    scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
     )

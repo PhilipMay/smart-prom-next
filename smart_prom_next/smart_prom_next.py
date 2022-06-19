@@ -9,7 +9,7 @@ import os
 import sys
 import time
 from subprocess import PIPE, Popen
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from prometheus_client import Gauge, start_http_server
 
@@ -25,6 +25,13 @@ SMART_STATUS_FAILED_GAUGE = Gauge(
     "1 if SMART status check failed, otherwise 0",
     ["device", "type", "model", "serial"],
 )
+
+SMART_SMARTCTL_EXIT_STATUS = Gauge(
+    "smart_prom_smartctl_exit_status",
+    "exit status of the smartctl call",
+    ["device", "type", "model", "serial"],
+)
+
 
 NVME_SMART_INFO_GAUGE = Gauge(
     "smart_prom_nvme_smart_info",
@@ -47,7 +54,7 @@ def normalize_str(the_str) -> str:
     return the_str.strip().lower()
 
 
-def call_smartctl(options: List[str]):
+def call_smartctl(options: List[str]) -> Tuple[str, int]:
     """Execute a child program in a new process."""
     args = ["smartctl"]
     args.extend(options)
@@ -76,9 +83,12 @@ def call_smartctl(options: List[str]):
                 )
 
             if isinstance(result, str) and len(result) > 0:  # we have a result
-                return result
+                return result, returncode
             else:
-                raise Exception(f"Calling {args} resurned no result! returncode: {popen.returncode} stderr: '{stderr_text}'")
+                raise Exception(
+                    f"Calling {args} resurned no result! "
+                    f"returncode: {popen.returncode} stderr: '{stderr_text}'"
+                )
 
     except FileNotFoundError:
         print(
@@ -89,24 +99,17 @@ def call_smartctl(options: List[str]):
         raise
 
 
-
 def scan_devices() -> List[Dict[str, str]]:
     """Return relevant devices.
 
     Returns:
         The ``name`` key contains the device name.
     """
-    results_json = call_smartctl(["--scan-open", "--json"])
+    results_json, _ = call_smartctl(["--scan-open", "--json"])  # TODO: what happens if _ != 0
     results = json.loads(results_json)
     devices = results.get("devices", [])
     assert isinstance(devices, list)
     return devices
-
-
-def read_device_info_json(device_name: str):
-    """Read SMART info from device."""
-    device_info_json = call_smartctl(["--xall", "--json", device_name])
-    return device_info_json
 
 
 def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
@@ -209,7 +212,9 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                                     )
 
 
-def scrape_metrics_for_device(device_name: str, device_type: str, device_info_json: str):
+def scrape_metrics_for_device(
+    device_name: str, device_type: str, device_info_json: str, returncode: int
+):
     """Scrape metrics for given device."""
     device_info = json.loads(device_info_json)
 
@@ -222,6 +227,8 @@ def scrape_metrics_for_device(device_name: str, device_type: str, device_info_js
         "model": model_name,
         "serial": serial_number,
     }
+
+    SMART_SMARTCTL_EXIT_STATUS.labels(**labels).set(returncode)
 
     scrape_smart_status(
         device_info=device_info,
@@ -248,10 +255,12 @@ def refresh_metrics():
     for device in devices:
         device_name = device.get("name", None)
         if isinstance(device_name, str) and len(device_name) > 0:  # TODO: what is not?
-            device_info_json = read_device_info_json(device_name)
+            device_info_json, returncode = call_smartctl(["--xall", "--json", device_name])
             device_type = device.get("type", None)
             if isinstance(device_type, str):  # TODO: what is not?
-                scrape_metrics_for_device(device_name, device_type, device_info_json)
+                scrape_metrics_for_device(
+                    device_name, device_type, device_info_json, returncode=returncode
+                )
 
 
 def main():

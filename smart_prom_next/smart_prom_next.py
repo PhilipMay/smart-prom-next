@@ -294,7 +294,7 @@ def refresh_metrics():
 
 def main():
     """Main function."""
-    print("Start smart-prom-next.")  # TODO: add version info when pip package available
+    print("Start smart-prom-next.")
 
     prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
     print(f"Start prometheus client. port: {prometheus_client_port}")

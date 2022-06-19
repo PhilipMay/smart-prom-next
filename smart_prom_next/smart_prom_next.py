@@ -214,20 +214,14 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                             sat_labels["attr_id"] = str(_id)
                             sat_labels["attr_name"] = _name
 
-                            # check when_failed
+                            # check when_failed (now and past)
                             _when_failed = smart_info_item.get("when_failed", None)
                             if _when_failed is not None:
-                                # set now value:
-                                now_value = 1 if _when_failed == "now" else 0
-                                get_smart_info_gauge().labels(
-                                    **sat_labels, attr_type="failed_now"
-                                ).set(now_value)
-
-                                # set past value:
-                                past_value = 1 if _when_failed == "past" else 0
-                                get_smart_info_gauge().labels(
-                                    **sat_labels, attr_type="failed_past"
-                                ).set(past_value)
+                                for _when_failed_value in ["now", "past"]:
+                                    gauge_value = 1 if _when_failed == _when_failed_value else 0
+                                    get_smart_info_gauge().labels(
+                                        **sat_labels, attr_type=f"failed_{_when_failed_value}"
+                                    ).set(gauge_value)
 
                             # read value, worst and thresh
                             for attr_type in ["value", "worst", "thresh"]:

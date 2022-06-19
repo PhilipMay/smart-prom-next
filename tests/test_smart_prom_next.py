@@ -3,7 +3,7 @@
 # which is available at https://opensource.org/licenses/MIT
 
 
-from smart_prom_next.main import normalize_str
+from smart_prom_next.smart_prom_next import normalize_str
 
 
 def test_normalize_str():

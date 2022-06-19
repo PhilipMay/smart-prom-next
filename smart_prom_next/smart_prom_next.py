@@ -14,36 +14,71 @@ from typing import Any, Dict, List, Tuple
 from prometheus_client import Gauge, start_http_server
 
 
-TEMPERATURE_GAUGE = Gauge(
-    "smart_prom_temperature",
-    "The temperature of a particular type.",
-    ["device", "type", "model", "serial", "temperature_type"],
-)
-
-SMART_STATUS_FAILED_GAUGE = Gauge(
-    "smart_prom_smart_status_failed",
-    "1 if SMART status check failed, otherwise 0",
-    ["device", "type", "model", "serial"],
-)
-
-SMART_SMARTCTL_EXIT_STATUS = Gauge(
-    "smart_prom_smartctl_exit_status",
-    "exit status of the smartctl call",
-    ["device", "type", "model", "serial"],
-)
+_TEMPERATURE_GAUGE = None
+_NVME_SMART_INFO_GAUGE = None
+_SMART_INFO_GAUGE = None
+_SMART_STATUS_FAILED_GAUGE = None
+_SMART_SMARTCTL_EXIT_STATUS = None
 
 
-NVME_SMART_INFO_GAUGE = Gauge(
-    "smart_prom_nvme_smart_info",
-    "nvme SMART health information log",
-    ["device", "type", "model", "serial", "info_type"],
-)
+def get_temperature_gauge():
+    """Lasy init of temperature_gauge."""
+    global _TEMPERATURE_GAUGE
+    if _TEMPERATURE_GAUGE is None:
+        _TEMPERATURE_GAUGE = Gauge(
+            "smart_prom_temperature",
+            "The temperature of a particular type.",
+            ["device", "type", "model", "serial", "temperature_type"],
+        )
+    return _TEMPERATURE_GAUGE
 
-SMART_INFO_GAUGE = Gauge(
-    "smart_prom_smart_info",
-    "SMART health information log",
-    ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
-)
+
+def get_smart_status_failed_gauge():
+    """Lasy init of smart_status_failed_gauge."""
+    global _SMART_STATUS_FAILED_GAUGE
+    if _SMART_STATUS_FAILED_GAUGE is None:
+        _SMART_STATUS_FAILED_GAUGE = Gauge(
+            "smart_prom_smart_status_failed",
+            "1 if SMART status check failed, otherwise 0",
+            ["device", "type", "model", "serial"],
+        )
+    return _SMART_STATUS_FAILED_GAUGE
+
+
+def get_smartctl_exit_status_gauge():
+    """Lasy init of smartctl_exit_status_gauge."""
+    global _SMART_SMARTCTL_EXIT_STATUS
+    if _SMART_SMARTCTL_EXIT_STATUS is None:
+        _SMART_SMARTCTL_EXIT_STATUS = Gauge(
+            "smart_prom_smartctl_exit_status",
+            "exit status of the smartctl call",
+            ["device", "type", "model", "serial"],
+        )
+    return _SMART_SMARTCTL_EXIT_STATUS
+
+
+def get_nvme_smart_info_gauge():
+    """Lasy init of nvme_smart_info_gauge."""
+    global _NVME_SMART_INFO_GAUGE
+    if _NVME_SMART_INFO_GAUGE is None:
+        _NVME_SMART_INFO_GAUGE = Gauge(
+            "smart_prom_nvme_smart_info",
+            "nvme SMART health information log",
+            ["device", "type", "model", "serial", "info_type"],
+        )
+    return _NVME_SMART_INFO_GAUGE
+
+
+def get_smart_info_gauge():
+    """Lasy init of smart_info_gauge."""
+    global _SMART_INFO_GAUGE
+    if _SMART_INFO_GAUGE is None:
+        _SMART_INFO_GAUGE = Gauge(
+            "smart_prom_smart_info",
+            "SMART health information log",
+            ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
+        )
+    return _SMART_INFO_GAUGE
 
 
 def normalize_str(the_str) -> str:
@@ -121,7 +156,7 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
         if isinstance(smart_status_passed, bool):  # TODO: add warning when else?
             smart_status_failed_value = 0 if smart_status_passed else 1
             print("smart_status_failed_value", smart_status_failed_value)  # TODO: delete me later
-            SMART_STATUS_FAILED_GAUGE.labels(**labels).set(smart_status_failed_value)
+            get_smart_status_failed_gauge().labels(**labels).set(smart_status_failed_value)
 
 
 def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
@@ -135,7 +170,7 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
             ):  # TODO: what is not?
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
-                TEMPERATURE_GAUGE.labels(**temperature_labels).set(temperature_value)
+                get_temperature_gauge().labels(**temperature_labels).set(temperature_value)
 
 
 def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
@@ -150,14 +185,14 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                         for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):
                             smart_info_labels = labels.copy()
                             smart_info_labels["info_type"] = f"{smart_key}_{temp_sensor_nr}"
-                            NVME_SMART_INFO_GAUGE.labels(**smart_info_labels).set(
+                            get_nvme_smart_info_gauge().labels(**smart_info_labels).set(
                                 temp_sensor_value
                             )
                 else:
                     if isinstance(smart_value, int):
                         smart_info_labels = labels.copy()
                         smart_info_labels["info_type"] = smart_key
-                        NVME_SMART_INFO_GAUGE.labels(**smart_info_labels).set(smart_value)
+                        get_nvme_smart_info_gauge().labels(**smart_info_labels).set(smart_value)
 
 
 def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
@@ -184,32 +219,32 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                             if _when_failed is not None:
                                 # set now value:
                                 now_value = 1 if _when_failed == "now" else 0
-                                SMART_INFO_GAUGE.labels(**sat_labels, attr_type="failed_now").set(
-                                    now_value
-                                )
+                                get_smart_info_gauge().labels(
+                                    **sat_labels, attr_type="failed_now"
+                                ).set(now_value)
 
                                 # set past value:
                                 past_value = 1 if _when_failed == "past" else 0
-                                SMART_INFO_GAUGE.labels(**sat_labels, attr_type="failed_past").set(
-                                    past_value
-                                )
+                                get_smart_info_gauge().labels(
+                                    **sat_labels, attr_type="failed_past"
+                                ).set(past_value)
 
                             # read value, worst and thresh
                             for attr_type in ["value", "worst", "thresh"]:
                                 _value = smart_info_item.get(attr_type, None)
                                 if isinstance(_value, int):
-                                    SMART_INFO_GAUGE.labels(**sat_labels, attr_type=attr_type).set(
-                                        _value
-                                    )
+                                    get_smart_info_gauge().labels(
+                                        **sat_labels, attr_type=attr_type
+                                    ).set(_value)
 
                             # read raw value
                             _raw = smart_info_item.get("raw", None)
                             if isinstance(_raw, dict):
                                 _value = _raw.get("value", None)
                                 if isinstance(_value, int):
-                                    SMART_INFO_GAUGE.labels(**sat_labels, attr_type="raw").set(
-                                        _value
-                                    )
+                                    get_smart_info_gauge().labels(
+                                        **sat_labels, attr_type="raw"
+                                    ).set(_value)
 
 
 def scrape_metrics_for_device(
@@ -228,7 +263,7 @@ def scrape_metrics_for_device(
         "serial": serial_number,
     }
 
-    SMART_SMARTCTL_EXIT_STATUS.labels(**labels).set(returncode)
+    get_smartctl_exit_status_gauge().labels(**labels).set(returncode)
 
     scrape_smart_status(
         device_info=device_info,

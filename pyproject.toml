@@ -25,4 +25,5 @@ disable = [
     "consider-using-f-string",
     "too-many-nested-blocks",
     "no-else-return",
+    "global-statement",
 ]

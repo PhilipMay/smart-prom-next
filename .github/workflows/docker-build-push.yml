@@ -1,36 +1,44 @@
-name: Docker build and push
+# https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
+name: Docker build and publish
 
 on:
   push:
-    branches:
-      - 'main'
+    branches: ['release']
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  build-and-push-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        name: Login
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Log in to GH packages
+        # https://github.com/docker/login-action
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v2
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        # https://github.com/docker/metadata-action
+        uses: docker/metadata-action@v4
         with:
-          context: ./
-          file: ./Dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
           push: true
-          tags: ghcr.io/philipmay/smart_prom_next:latest
-#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:latest
-#          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:buildcache
-#          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:buildcache,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

@@ -19,10 +19,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-#      -
-#        name: Set up QEMU
-#        # https://github.com/docker/setup-qemu-action
-#        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up QEMU
+        # https://github.com/docker/setup-qemu-action
+        uses: docker/setup-qemu-action@v2
       -
         name: Set up Docker Buildx
         # https://github.com/docker/setup-buildx-action

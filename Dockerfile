@@ -5,14 +5,14 @@ FROM python:3.10.5-slim-bullseye
 # see https://github.com/PhilipMay/smart-prom-next/issues/13
 ENV PYTHONUNBUFFERED=1
 
-ADD . /smart_prom_next
+WORKDIR /app
 
-# TODO: change to pypi smart_prom_next install
+ADD . /app
 
 RUN apt-get update && \
     apt-get -y install smartmontools && \
     pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir /smart_prom_next
+    pip install --no-cache-dir -e .
 
 EXPOSE 9902
 

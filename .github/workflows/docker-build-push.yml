@@ -29,7 +29,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ghcr.io/philipmay_2/smart_prom_next_2:latest
+          tags: ghcr.io/philipmay/smart_prom_next_2:latest
 #          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:latest
 #          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:buildcache
 #          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:buildcache,mode=max

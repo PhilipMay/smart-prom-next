@@ -1,5 +1,11 @@
 # S.M.A.R.T. Prometheus Metrics Exporter
 
+This is a simple [Prometheus](https://prometheus.io/docs/introduction/overview/) metric exporter for
+[S.M.A.R.T.](https://en.wikipedia.org/wiki/S.M.A.R.T.) values of hard disks.
+Python and the Linux tool [smartctl](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in)
+are used to read out the hard disk values. These are then exposed using
+[Prometheus Python Client](https://github.com/prometheus/client_python) over network port 9902.
+
 ## Configuration Options / Environment Variables
 
 smart-prom-next can be configured by the following environment variables:

@@ -24,7 +24,7 @@ Below is an example of how smart-prom-next can be used with [docker-compose](htt
 ```yaml
   smart-prom-next:
     # see https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next
-    image: ghcr.io/philipmay/smart-prom-next:0.0.1rc9
+    image: ghcr.io/philipmay/smart-prom-next:0.0.1
     container_name: "smart-prom-next"
     restart: unless-stopped
     privileged: true

@@ -1,6 +1,6 @@
 # S.M.A.R.T. Prometheus Metrics Exporter
 
-This is a [Prometheus](https://prometheus.io/docs/introduction/overview/) metric exporter for
+smart-prom-next is a [Prometheus](https://prometheus.io/docs/introduction/overview/) metric exporter for
 [S.M.A.R.T.](https://en.wikipedia.org/wiki/S.M.A.R.T.) values of hard disks.
 Python and the Linux tool [smartctl](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in)
 are used to read out the hard disk values. These are then exposed using
@@ -8,6 +8,12 @@ are used to read out the hard disk values. These are then exposed using
 
 According to Wikipedia, the primary function of S.M.A.R.T. is to detect and report various indicators of drive
 reliability with the intent of anticipating imminent hardware failures.
+
+Currently, smart-prom-next is only
+[available as a docker image](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next).
+The base is built from the slim version of the [official Python Docker image](https://hub.docker.com/_/python),
+which uses [Debian Bullseye](https://www.debian.org/releases/bullseye/).
+It is built for multiple platforms: linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
 
 ## Configuration Options / Environment Variables
 

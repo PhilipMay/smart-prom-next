@@ -65,9 +65,9 @@ To adjust the environment variables, the following settings can be added, for ex
 
 ### `smart_prom_smartctl_exit_status`
 
-The exit status (aka exit code or return code) of the `smartctl` tool. 
+The exit status (aka exit code or return code) of the `smartctl` tool.
 Any value other than zero indicates an issue.
-The more detailed description can be found in the EXIT STATUS chapter of the 
+The more detailed description can be found in the EXIT STATUS chapter of the
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in) pages.
 
 ### `smart_prom_smart_status_failed`

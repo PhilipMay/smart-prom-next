@@ -217,16 +217,17 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
                         # id and name must be available
                         if isinstance(_id, int) and isinstance(_name, str):
                             sat_labels = labels.copy()
-                            sat_labels["attr_id"] = str(_id)
-                            sat_labels["attr_name"] = _name
+                            sat_labels["attr_id"] = str(_id)  # no further normalization
+                            sat_labels["attr_name"] = normalize_str(_name)
 
                             # check when_failed (now and past)
                             _when_failed = smart_info_item.get("when_failed", None)
+                            _when_failed = normalize_str(_when_failed)
                             if _when_failed is not None:
                                 for _when_failed_value in ["now", "past"]:
                                     gauge_value = 1 if _when_failed == _when_failed_value else 0
                                     get_smart_info_gauge().labels(
-                                        **sat_labels, attr_type=f"failed_{_when_failed_value}"
+                                        **sat_labels, attr_type=f"failed_{_when_failed}"
                                     ).set(gauge_value)
 
                             # read value, worst and thresh
@@ -257,10 +258,10 @@ def scrape_metrics_for_device(
     serial_number = device_info.get("serial_number", "unknown")
 
     labels = {
-        "device": device_name,
-        "type": device_type,
-        "model": model_name,
-        "serial": serial_number,
+        "device": device_name,  # no normalization
+        "type": normalize_str(device_type),
+        "model": model_name,  # no normalization
+        "serial": serial_number,  # no normalization
     }
 
     get_smartctl_exit_status_gauge().labels(**labels).set(returncode)

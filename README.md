@@ -75,6 +75,14 @@ The more detailed description can be found in the EXIT STATUS chapter of the
 The SMART health status of the device. A value of 0 indicates a healthy state.
 A value of 1 means that the device has not passed the health check and there is a problem.
 
+### `smart_prom_temperature`
+
+The current temperature of the device.
+
+### `smart_prom_nvme_smart_info`
+
+NVMe specific SMART attributes obtained from the SMART/Health Information log.
+
 ## Licensing
 
 Copyright (c) 2022 Philip May

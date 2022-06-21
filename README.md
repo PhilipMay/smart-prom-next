@@ -67,8 +67,8 @@ To adjust the environment variables, the following settings can be added, for ex
 
 The exit status (aka exit code or return code) of the `smartctl` tool.
 Any value other than zero indicates an issue.
-The more detailed description can be found in the EXIT STATUS chapter of the
-[smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in) pages.
+A more detailed description can be found in the EXIT STATUS chapter of the
+[smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
 
 ### `smart_prom_smart_status_failed`
 
@@ -82,6 +82,14 @@ The current temperature of the device.
 ### `smart_prom_nvme_smart_info`
 
 NVMe specific SMART attributes obtained from the SMART/Health Information log.
+A more detailed description can be found in the `-A, --attributes` chapter of the
+[smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
+
+### `smart_prom_smart_info`
+
+The SMART Attributes.
+A more detailed description can be found in the `-A, --attributes` chapter of the
+[smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
 
 ## Licensing
 

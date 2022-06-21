@@ -18,13 +18,13 @@ python_gc_collections_total{generation="2"} 0.0
 python_info{implementation="CPython",major="3",minor="10",patchlevel="4",version="3.10.4"} 1.0
 # HELP process_virtual_memory_bytes Virtual memory size in bytes.
 # TYPE process_virtual_memory_bytes gauge
-process_virtual_memory_bytes 1.81202944e+08
+process_virtual_memory_bytes 1.8126848e+08
 # HELP process_resident_memory_bytes Resident memory size in bytes.
 # TYPE process_resident_memory_bytes gauge
-process_resident_memory_bytes 2.2786048e+07
+process_resident_memory_bytes 2.258944e+07
 # HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
 # TYPE process_start_time_seconds gauge
-process_start_time_seconds 1.65583952713e+09
+process_start_time_seconds 1.65584229052e+09
 # HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
 # TYPE process_cpu_seconds_total counter
 process_cpu_seconds_total 0.11
@@ -44,114 +44,134 @@ smart_prom_smart_status_failed{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",s
 smart_prom_smart_status_failed{device="/dev/nvme0",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 0.0
 # HELP smart_prom_temperature The temperature of a particular type.
 # TYPE smart_prom_temperature gauge
-smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="current",type="usbjmicron"} 26.0
-smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="power_cycle_min",type="usbjmicron"} 25.0
-smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="power_cycle_max",type="usbjmicron"} 25.0
+smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="current",type="usbjmicron"} 22.0
+smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="power_cycle_min",type="usbjmicron"} 22.0
+smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="power_cycle_max",type="usbjmicron"} 22.0
 smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="lifetime_min",type="usbjmicron"} 23.0
 smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="lifetime_max",type="usbjmicron"} 69.0
 smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="op_limit_min",type="usbjmicron"} 0.0
 smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="op_limit_max",type="usbjmicron"} 60.0
 smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="limit_min",type="usbjmicron"} 1.0
 smart_prom_temperature{device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",temperature_type="limit_max",type="usbjmicron"} 85.0
-smart_prom_temperature{device="/dev/nvme0",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",temperature_type="current",type="nvme"} 32.0
+smart_prom_temperature{device="/dev/nvme0",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",temperature_type="current",type="nvme"} 31.0
 # HELP smart_prom_smart_info SMART health information log
 # TYPE smart_prom_smart_info gauge
-smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
 smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
 smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 51.0
 smart_prom_smart_info{attr_id="1",attr_name="raw_read_error_rate",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 129.0
-smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 185.0
 smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 185.0
 smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 21.0
-smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1725.0
-smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="3",attr_name="spin_up_time",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1716.0
+smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 91.0
 smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 91.0
 smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 9026.0
-smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="4",attr_name="start_stop_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 9048.0
+smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1.0
+smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 133.0
 smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 133.0
 smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 140.0
 smart_prom_smart_info{attr_id="5",attr_name="reallocated_sector_ct",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 535.0
-smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 253.0
 smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 51.0
 smart_prom_smart_info{attr_id="7",attr_name="seek_error_rate",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 78.0
 smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 78.0
 smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="9",attr_name="power_on_hours",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 16402.0
-smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 51.0
 smart_prom_smart_info{attr_id="10",attr_name="spin_retry_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1.0
-smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="11",attr_name="calibration_retry_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 97.0
 smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 97.0
 smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 3442.0
-smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="12",attr_name="power_cycle_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 3443.0
+smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 98.0
 smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 36.0
 smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="187",attr_name="reported_uncorrect",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 84.0
-smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 94.0
 smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="188",attr_name="command_timeout",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 132.0
+smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1.0
-smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 74.0
+smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 78.0
 smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 31.0
 smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 40.0
-smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 26.0
-smart_prom_smart_info{attr_id="192",attr_name="power-off_retract_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="192",attr_name="power-off_retract_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
-smart_prom_smart_info{attr_id="192",attr_name="power-off_retract_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
-smart_prom_smart_info{attr_id="192",attr_name="power-off_retract_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="192",attr_name="power-off_retract_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 93.0
-smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="190",attr_name="airflow_temperature_cel",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 22.0
+smart_prom_smart_info{attr_id="192",attr_name="power_off_retract_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="192",attr_name="power_off_retract_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="192",attr_name="power_off_retract_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
+smart_prom_smart_info{attr_id="192",attr_name="power_off_retract_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
+smart_prom_smart_info{attr_id="192",attr_name="power_off_retract_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="192",attr_name="power_off_retract_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 94.0
+smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 153.0
 smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 153.0
 smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 141128.0
-smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 121.0
+smart_prom_smart_info{attr_id="193",attr_name="load_cycle_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 141130.0
+smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 125.0
 smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 78.0
 smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 26.0
-smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="194",attr_name="temperature_celsius",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 22.0
+smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 199.0
 smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 199.0
 smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="196",attr_name="reallocated_event_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1.0
-smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
 smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
 smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="197",attr_name="current_pending_sector",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 1.0
-smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 253.0
 smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="198",attr_name="offline_uncorrectable",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
 smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 200.0
 smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="199",attr_name="udma_crc_error_count",attr_type="raw",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
-smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type="failed_",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type="failed_now",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
+smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type="failed_past",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 0.0
 smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type="value",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 100.0
 smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type="worst",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 253.0
 smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type="thresh",device="/dev/sdb",model="WDC WD3200BEVT-60ZCT0",serial="WD-WXE708D44602",type="usbjmicron"} 51.0
@@ -159,20 +179,20 @@ smart_prom_smart_info{attr_id="200",attr_name="multi_zone_error_rate",attr_type=
 # HELP smart_prom_nvme_smart_info nvme SMART health information log
 # TYPE smart_prom_nvme_smart_info gauge
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="critical_warning",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 0.0
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="temperature",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 32.0
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="temperature",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 31.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="available_spare",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 100.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="available_spare_threshold",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 10.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="percentage_used",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 3.0
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="data_units_read",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1.1687967e+07
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="data_units_written",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1.3967314e+07
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="host_reads",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 3.40924132e+08
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="host_writes",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1.81413075e+08
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="data_units_read",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1.1687975e+07
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="data_units_written",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1.396873e+07
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="host_reads",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 3.40924252e+08
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="host_writes",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1.81443808e+08
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="controller_busy_time",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 392.0
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="power_cycles",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 3051.0
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="power_on_hours",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1782.0
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="power_cycles",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 3052.0
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="power_on_hours",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 1783.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="unsafe_shutdowns",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 132.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="media_errors",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 0.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="num_err_log_entries",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 0.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="warning_temp_time",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 0.0
 smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="critical_comp_time",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 0.0
-smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="temperature_sensors_1",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 32.0
+smart_prom_nvme_smart_info{device="/dev/nvme0",info_type="temperature_sensors_1",model="KXG6AZNV512G TOSHIBA",serial="Y9SF71LHFWZL",type="nvme"} 31.0

@@ -20,8 +20,8 @@ linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
 
 smart-prom-next can be configured by the following environment variables:
 
-- `PROMETHEUS_METRIC_PORT`: port number over which the Prometheus metrics are exposed (default: 9902)
-- `SMART_INFO_READ_INTERVAL_SECONDS`: time interval in seconds at which the SMART values of the hard disk are read
+- `PROMETHEUS_METRIC_PORT` - port number over which the Prometheus metrics are exposed (default: 9902)
+- `SMART_INFO_READ_INTERVAL_SECONDS` - time interval in seconds at which the SMART values of the hard disk are read
   (default: 60)
 
 ## Docker / docker-compose
@@ -60,6 +60,15 @@ To adjust the environment variables, the following settings can be added, for ex
       - PROMETHEUS_METRIC_PORT=9009
       - SMART_INFO_READ_INTERVAL_SECONDS=120
 ```
+
+## Available Metrics
+
+### `smart_prom_smartctl_exit_status`
+
+The exit status (aka exit code or return code) of the `smartctl` tool. 
+Any value other than zero indicates an issue.
+The more detailed description can be found in the EXIT STATUS chapter of the 
+[smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in) pages.
 
 ## Licensing
 

@@ -11,7 +11,7 @@ import setuptools
 
 project_name = "smart_prom_next"
 source_code = "https://github.com/PhilipMay/smart-prom-next"
-keywords = ("prometheus", "smart")  # TODO: add keywords
+keywords = ("prometheus", "smart", "docker", "kubernetes", "monitoring", "metrics", "grafana")
 install_requires = ["prometheus-client"]
 extras_require = {
     "checking": [
@@ -67,7 +67,7 @@ setuptools.setup(
     extras_require=extras_require,
     keywords=keywords,
     entry_points={"console_scripts": ["smart-prom-next = smart_prom_next:cli_main"]},
-    classifiers=[  # TODO: add more - linux only, ...
+    classifiers=[
         "Development Status :: 3 - Alpha",
         # "Development Status :: 4 - Beta",
         # "Development Status :: 5 - Production/Stable",

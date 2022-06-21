@@ -44,6 +44,15 @@ services:
 The `privileged: true` permission is absolutely necessary so that smartctl can also access the hard disks from
 within the container.
 
+**Security note:** In the production environment, you should leave out the `ports:` part in the `docker-compose.yml`
+in the vast majority of configurations so that it is not visible to the outside. Instead, the container should
+be assigned to a network in which the prometheus container is located. This looks like this:
+
+```yaml
+    networks:
+      - monitor
+```
+
 To adjust the environment variables, the following settings can be added, for example:
 
 ```yaml

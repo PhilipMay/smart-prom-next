@@ -70,14 +70,20 @@ Any value other than zero indicates an issue.
 A more detailed description can be found in the EXIT STATUS chapter of the
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
 
+List of labels used (description see below): "device", "type", "model", "serial"
+
 ### `smart_prom_smart_status_failed`
 
 The SMART health status of the device. A value of 0 indicates a healthy state.
 A value of 1 means that the device has not passed the health check and there is a problem.
 
+List of labels used (description see below): "device", "type", "model", "serial"
+
 ### `smart_prom_temperature`
 
-The current temperature of the device.
+The temperature values of the device. These include not only the current temperature but also other values.
+
+List of labels used (description see below): "device", "type", "model", "serial", "temperature_type"
 
 ### `smart_prom_nvme_smart_info`
 
@@ -85,11 +91,15 @@ NVMe specific SMART attributes obtained from the SMART/Health Information log.
 A more detailed description can be found in the `-A, --attributes` chapter of the
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
 
+List of labels used (description see below): "device", "type", "model", "serial", "info_type"
+
 ### `smart_prom_smart_info`
 
 The SMART Attributes.
 A more detailed description can be found in the `-A, --attributes` chapter of the
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
+
+List of labels used (description see below): "device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"
 
 ## Licensing
 

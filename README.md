@@ -70,6 +70,11 @@ Any value other than zero indicates an issue.
 The more detailed description can be found in the EXIT STATUS chapter of the 
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in) pages.
 
+### `smart_prom_smart_status_failed`
+
+The SMART health status of the device. A value of 0 indicates a healthy state.
+A value of 1 means that the device has not passed the health check and there is a problem.
+
 ## Licensing
 
 Copyright (c) 2022 Philip May

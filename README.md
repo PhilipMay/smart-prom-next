@@ -24,7 +24,7 @@ smart-prom-next can be configured by the following environment variables:
 - `SMART_INFO_READ_INTERVAL_SECONDS`: time interval in seconds at which the SMART values of the hard disk are read
   (default: 60)
 
-## docker-compose Example
+## Docker / docker-compose
 
 Below is an example of a complete minimal `docker-compose.yml`, how smart-prom-next can be used with [docker-compose](https://docs.docker.com/compose/):
 

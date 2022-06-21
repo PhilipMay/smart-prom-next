@@ -19,7 +19,7 @@ smart-prom-next can be configured by the following environment variables:
 
 ## docker-compose Example
 
-Below is an example of a complete minimal file, how smart-prom-next can be used with [docker-compose](https://docs.docker.com/compose/):
+Below is an example of a complete minimal `docker-compose.yml`, how smart-prom-next can be used with [docker-compose](https://docs.docker.com/compose/):
 
 ```yaml
 version: "3.0"
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
     privileged: true
     ports:
-     - 9902:9902
+      - 9902:9902
 ```
 
 The `privileged: true` permission is absolutely necessary so that smartctl can also access the hard disks from

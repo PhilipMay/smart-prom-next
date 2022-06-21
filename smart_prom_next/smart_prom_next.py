@@ -86,7 +86,7 @@ def get_smart_info_gauge() -> Gauge:
     return _SMART_INFO_GAUGE
 
 
-def normalize_str(the_str) -> str:
+def normalize_str(the_str: str) -> str:
     """Normalize a string.
 
     This is useful to prepare Prometheus labels.
@@ -156,7 +156,7 @@ def scan_devices() -> List[Dict[str, str]]:
     return devices
 
 
-def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
+def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape SMART status."""
     smart_status = device_info.get("smart_status", None)
     if isinstance(smart_status, dict):  # TODO: add warning when else?
@@ -166,7 +166,7 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]):
             get_smart_status_failed_gauge().labels(**labels).set(smart_status_failed_value)
 
 
-def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
+def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
     if isinstance(temperature, dict):  # TODO: what is not?
@@ -179,7 +179,7 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]):
                 get_temperature_gauge().labels(**temperature_labels).set(temperature_value)
 
 
-def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
+def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape nvme specific info."""
     nvme_smart_info = device_info.get("nvme_smart_health_information_log", None)
     if isinstance(nvme_smart_info, dict):
@@ -201,7 +201,7 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
                         get_nvme_smart_info_gauge().labels(**smart_info_labels).set(smart_value)
 
 
-def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
+def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape sat specific info."""
     sat_smart_info = device_info.get("ata_smart_attributes", None)
     if isinstance(sat_smart_info, dict):
@@ -249,7 +249,7 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]):
 
 def scrape_metrics_for_device(
     device_name: str, device_type: str, device_info_json: str, returncode: int
-):
+) -> None:
     """Scrape metrics for given device."""
     device_info = json.loads(device_info_json)
 
@@ -283,7 +283,7 @@ def scrape_metrics_for_device(
     )
 
 
-def refresh_metrics():
+def refresh_metrics() -> None:
     """Refresh the metrics."""
     devices = scan_devices()
     for device in devices:
@@ -297,7 +297,7 @@ def refresh_metrics():
                 )
 
 
-def main():
+def main() -> None:
     """Main function."""
     global first_scrape_interval
     print("Start smart-prom-next.")

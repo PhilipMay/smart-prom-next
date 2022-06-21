@@ -7,6 +7,6 @@ from smart_prom_next.smart_prom_next import normalize_str
 
 
 def test_normalize_str():
-    input = " ABxy "
-    output = normalize_str(input)
-    assert output == "abxy"
+    string = " AB- ./:#*+~xy "
+    output = normalize_str(string)
+    assert output == "ab_________xy"

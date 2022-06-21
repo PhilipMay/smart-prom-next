@@ -91,7 +91,11 @@ def normalize_str(the_str: str) -> str:
 
     This is useful to prepare Prometheus labels.
     """
-    return the_str.strip().lower()
+    result = the_str.strip().lower()
+    replace_cars = ["-", " ", ".", "/", ":", "#", "*", "+", "~"]
+    for replace_car in replace_cars:
+        result = result.replace(replace_car, '_')
+    return result
 
 
 def call_smartctl(options: List[str]) -> Tuple[str, int]:
@@ -184,8 +188,8 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
     nvme_smart_info = device_info.get("nvme_smart_health_information_log", None)
     if isinstance(nvme_smart_info, dict):
         for smart_key, smart_value in nvme_smart_info.items():
-            smart_key = normalize_str(smart_key)
             if isinstance(smart_key, str):
+                smart_key = normalize_str(smart_key)
                 if smart_key == "temperature_sensors":
                     if isinstance(smart_value, list):
                         for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):

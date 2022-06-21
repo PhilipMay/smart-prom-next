@@ -9,7 +9,7 @@ import os
 import sys
 import time
 from subprocess import PIPE, Popen
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from prometheus_client import Gauge, start_http_server
 
@@ -17,16 +17,16 @@ from prometheus_client import Gauge, start_http_server
 # Prometheus gauges
 # Do not access them directly!
 # Please use the appropriate get_xyz_gauge() functions.
-_TEMPERATURE_GAUGE = None
-_NVME_SMART_INFO_GAUGE = None
-_SMART_INFO_GAUGE = None
-_SMART_STATUS_FAILED_GAUGE = None
-_SMART_SMARTCTL_EXIT_STATUS_GAUGE = None
+_TEMPERATURE_GAUGE: Optional[Gauge] = None
+_NVME_SMART_INFO_GAUGE: Optional[Gauge] = None
+_SMART_INFO_GAUGE: Optional[Gauge] = None
+_SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
+_SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
 
-first_scrape_interval = True
+first_scrape_interval: bool = True
 
 
-def get_temperature_gauge():
+def get_temperature_gauge() -> Gauge:
     """Lasy init of temperature_gauge."""
     global _TEMPERATURE_GAUGE
     if _TEMPERATURE_GAUGE is None:
@@ -38,7 +38,7 @@ def get_temperature_gauge():
     return _TEMPERATURE_GAUGE
 
 
-def get_smart_status_failed_gauge():
+def get_smart_status_failed_gauge() -> Gauge:
     """Lasy init of smart_status_failed_gauge."""
     global _SMART_STATUS_FAILED_GAUGE
     if _SMART_STATUS_FAILED_GAUGE is None:
@@ -50,7 +50,7 @@ def get_smart_status_failed_gauge():
     return _SMART_STATUS_FAILED_GAUGE
 
 
-def get_smartctl_exit_status_gauge():
+def get_smartctl_exit_status_gauge() -> Gauge:
     """Lasy init of smartctl_exit_status_gauge."""
     global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
     if _SMART_SMARTCTL_EXIT_STATUS_GAUGE is None:
@@ -62,7 +62,7 @@ def get_smartctl_exit_status_gauge():
     return _SMART_SMARTCTL_EXIT_STATUS_GAUGE
 
 
-def get_nvme_smart_info_gauge():
+def get_nvme_smart_info_gauge() -> Gauge:
     """Lasy init of nvme_smart_info_gauge."""
     global _NVME_SMART_INFO_GAUGE
     if _NVME_SMART_INFO_GAUGE is None:
@@ -74,7 +74,7 @@ def get_nvme_smart_info_gauge():
     return _NVME_SMART_INFO_GAUGE
 
 
-def get_smart_info_gauge():
+def get_smart_info_gauge() -> Gauge:
     """Lasy init of smart_info_gauge."""
     global _SMART_INFO_GAUGE
     if _SMART_INFO_GAUGE is None:

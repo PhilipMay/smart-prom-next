@@ -13,7 +13,8 @@ Currently, smart-prom-next is only
 [available as a docker image](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next).
 The base is built from the slim version of the [official Python Docker image](https://hub.docker.com/_/python),
 which uses [Debian Bullseye](https://www.debian.org/releases/bullseye/).
-It is built for multiple platforms: linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
+It is built for multiple platforms:</br>
+linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
 
 ## Configuration Options / Environment Variables
 

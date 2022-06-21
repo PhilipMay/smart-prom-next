@@ -101,6 +101,38 @@ A more detailed description can be found in the `-A, --attributes` chapter of th
 
 List of labels used (description see below): "device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"
 
+## Prometheus Alerts
+
+Based on the metrics, [Prometheus alerts](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
+can be defined. Below are a few suggestions for `prometheus_rules.yml`:
+
+```yaml
+groups:
+  - name: alert_rules
+    rules:
+  
+      - alert: DiskFailing
+        expr: smart_prom_smart_info{attr_type="failed_now"} == 1
+        labels:
+          severity: critical
+        annotations:
+          summary: "disk failing"
+
+      - alert: DiskTemperatureHigh
+        expr: smart_prom_temperature{temperature_type="current"} > 50
+        labels:
+          severity: warning
+        annotations:
+          summary: "disk temperature > 50"
+
+      - alert: SMARTStatusFailing
+        expr: smart_prom_smart_status_failed == 1
+        labels:
+          severity: critical
+        annotations:
+          summary: "SMART status failing"
+```
+
 ## Licensing
 
 Copyright (c) 2022 Philip May

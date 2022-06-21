@@ -23,6 +23,8 @@ _SMART_INFO_GAUGE = None
 _SMART_STATUS_FAILED_GAUGE = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE = None
 
+first_scrape_interval = True
+
 
 def get_temperature_gauge():
     """Lasy init of temperature_gauge."""
@@ -96,6 +98,8 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
     """Execute a child program in a new process."""
     args = ["smartctl"]
     args.extend(options)
+    if first_scrape_interval:
+        print(f"Debug output of the first scraping iteration: call: {args}")
     try:
         with Popen(args, stdout=PIPE, stderr=PIPE) as popen:
             stdout, stderr = popen.communicate()
@@ -121,6 +125,8 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
                 )
 
             if isinstance(result, str) and len(result) > 0:  # we have a result
+                if first_scrape_interval:
+                    print(f"Debug output of the first scraping iteration: result: {result}")
                 return result, returncode
             else:
                 raise Exception(
@@ -293,6 +299,7 @@ def refresh_metrics():
 
 def main():
     """Main function."""
+    global first_scrape_interval
     print("Start smart-prom-next.")
 
     prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
@@ -306,6 +313,7 @@ def main():
 
     while True:
         refresh_metrics()
+        first_scrape_interval = False
         time.sleep(smart_info_refresh_interval)
 
 

@@ -14,11 +14,14 @@ from typing import Any, Dict, List, Tuple
 from prometheus_client import Gauge, start_http_server
 
 
+# Prometheus gauges
+# Do not access them directly!
+# Please use the appropriate get_xyz_gauge() functions.
 _TEMPERATURE_GAUGE = None
 _NVME_SMART_INFO_GAUGE = None
 _SMART_INFO_GAUGE = None
 _SMART_STATUS_FAILED_GAUGE = None
-_SMART_SMARTCTL_EXIT_STATUS = None
+_SMART_SMARTCTL_EXIT_STATUS_GAUGE = None
 
 
 def get_temperature_gauge():
@@ -47,14 +50,14 @@ def get_smart_status_failed_gauge():
 
 def get_smartctl_exit_status_gauge():
     """Lasy init of smartctl_exit_status_gauge."""
-    global _SMART_SMARTCTL_EXIT_STATUS
-    if _SMART_SMARTCTL_EXIT_STATUS is None:
-        _SMART_SMARTCTL_EXIT_STATUS = Gauge(
+    global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
+    if _SMART_SMARTCTL_EXIT_STATUS_GAUGE is None:
+        _SMART_SMARTCTL_EXIT_STATUS_GAUGE = Gauge(
             "smart_prom_smartctl_exit_status",
             "exit status of the smartctl call",
             ["device", "type", "model", "serial"],
         )
-    return _SMART_SMARTCTL_EXIT_STATUS
+    return _SMART_SMARTCTL_EXIT_STATUS_GAUGE
 
 
 def get_nvme_smart_info_gauge():

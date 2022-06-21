@@ -89,12 +89,15 @@ def get_smart_info_gauge() -> Gauge:
 def normalize_str(the_str: str) -> str:
     """Normalize a string.
 
-    This is useful to prepare Prometheus labels.
+    If anything other than a ``str`` is passed, then the same value is returned unchanged.
+    This is useful to prepare and clean Prometheus labels.
     """
-    result = the_str.strip().lower()
-    replace_cars = ["-", " ", ".", "/", ":", "#", "*", "+", "~"]
-    for replace_car in replace_cars:
-        result = result.replace(replace_car, '_')
+    result = the_str
+    if isinstance(the_str, str):
+        result = the_str.strip().lower()
+        replace_cars = ["-", " ", ".", "/", ":", "#", "*", "+", "~"]
+        for replace_car in replace_cars:
+            result = result.replace(replace_car, "_")
     return result
 
 
@@ -226,8 +229,7 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
 
                             # check when_failed (now and past)
                             _when_failed = smart_info_item.get("when_failed", None)
-                            if isinstance(_when_failed, str):
-                                _when_failed = normalize_str(_when_failed)
+                            _when_failed = normalize_str(_when_failed)
                             # always call this without condition
                             for _when_failed_value in ["now", "past"]:
                                 gauge_value = 1 if _when_failed == _when_failed_value else 0

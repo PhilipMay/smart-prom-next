@@ -6,7 +6,13 @@
 from smart_prom_next.smart_prom_next import normalize_str
 
 
-def test_normalize_str():
+def test_normalize_str__happy_case():
     string = " AB- ./:#*+~xy "
     output = normalize_str(string)
     assert output == "ab_________xy"
+
+
+def test_normalize_str__non_str_type():
+    string = 77
+    output = normalize_str(string)
+    assert string == output

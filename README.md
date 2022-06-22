@@ -91,7 +91,7 @@ NVMe specific SMART attributes obtained from the SMART/Health Information log.
 A more detailed description can be found in the `-A, --attributes` chapter of the
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
 
-List of labels used (description see below): "device", "type", "model", "serial", "info_type"
+List of labels used (description see below): "device", "type", "model", "serial", "attr_name"
 
 ### `smart_prom_smart_info`
 
@@ -100,6 +100,21 @@ A more detailed description can be found in the `-A, --attributes` chapter of th
 [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in).
 
 List of labels used (description see below): "device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"
+
+## Metrics Label
+
+In this project, we use different labels on the metrics. These are described here:
+
+- `device` - device file, e.g.: `/dev/nvme0`, `/dev/sda`
+- `type` -  type of the device, e.g.: `ata`, `nvme`, `usbjmicron`
+- `model` - model name, e.g.: `KXG6AZNV512G TOSHIBA`, `WDC WD3200BEVT-60ZCT0`
+- `serial` - serial number, e.g.: `WD-WXE708D44703`, `Y9SF71LHFWZL`
+- `temperature_type` - type of the temperature value, e.g.: `current`, `power_cycle_max`, `lifetime_max`, `op_limit_max`
+- `attr_name` - SMART attribute name, e.g.: `raw_read_error_rate`, `reallocated_sector_ct`, `critical_warning`
+- `attr_id` - SMART attribute id, e.g.: `1`, `3`, `4`
+- `attr_type` - type of the respective SMART attribute - value is one of this: `value`, `worst`, `thresh`, `raw`, `failed_now`, `failed_past` -
+  a detailed description can be found in the `-A, --attributes` chapter of the
+  [smartctl man pages](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in)
 
 ## Prometheus Alerts
 

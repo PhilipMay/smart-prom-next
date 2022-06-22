@@ -106,6 +106,10 @@ A more detailed description can be found in the `-A, --attributes` chapter of th
 
 List of labels used (description see below): "device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"
 
+### `smart_prom_scrape_iterations_total`
+
+Counter how often the SMART values were scraped.
+
 ## Metrics Label
 
 In this project, we use different labels on the metrics. These are described here:

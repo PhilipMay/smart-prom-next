@@ -11,7 +11,7 @@ import time
 from subprocess import PIPE, Popen
 from typing import Any, Dict, List, Optional, Tuple
 
-from prometheus_client import Gauge, start_http_server
+from prometheus_client import Counter, Gauge, start_http_server
 
 
 # Prometheus gauges
@@ -22,6 +22,12 @@ _NVME_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
+
+# Counter how often the SMART values were scraped.
+SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
+    "smart_prom_scrape_iterations_total", "Total number of SMART scrape iterations."
+)
+
 
 first_scrape_interval: bool = True
 
@@ -321,6 +327,7 @@ def main() -> None:
 
     while True:
         refresh_metrics()
+        SCRAPE_ITERATIONS_COUNTER.inc()
         first_scrape_interval = False
         time.sleep(smart_info_refresh_interval)
 

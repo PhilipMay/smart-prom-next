@@ -1,5 +1,10 @@
 # S.M.A.R.T. Prometheus Metrics Exporter
 
+[![MIT License](https://img.shields.io/github/license/telekom/HPOflow)](https://github.com/PhilipMay/smart-prom-next/blob/main/LICENSE)
+[![pytest status](https://github.com/telekom/HPOflow/actions/workflows/pytest.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml)
+[![Static Code Checks status](https://github.com/telekom/HPOflow/actions/workflows/static_checks.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/static_checks.yml)
+[![GitHub issues](https://img.shields.io/github/issues-raw/telekom/HPOflow)](https://github.com/PhilipMay/smart-prom-next/issues)
+
 smart-prom-next is a [Prometheus](https://prometheus.io/docs/introduction/overview/) metric exporter for
 [S.M.A.R.T.](https://en.wikipedia.org/wiki/S.M.A.R.T.) values of hard disks.
 Python and the Linux tool [smartctl](https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in)

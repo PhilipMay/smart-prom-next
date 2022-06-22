@@ -69,7 +69,7 @@ def get_nvme_smart_info_gauge() -> Gauge:
         _NVME_SMART_INFO_GAUGE = Gauge(
             "smart_prom_nvme_smart_info",
             "nvme SMART health information log",
-            ["device", "type", "model", "serial", "info_type"],
+            ["device", "type", "model", "serial", "attr_name"],
         )
     return _NVME_SMART_INFO_GAUGE
 
@@ -197,14 +197,14 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                     if isinstance(smart_value, list):
                         for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):
                             smart_info_labels = labels.copy()
-                            smart_info_labels["info_type"] = f"{smart_key}_{temp_sensor_nr}"
+                            smart_info_labels["attr_name"] = f"{smart_key}_{temp_sensor_nr}"
                             get_nvme_smart_info_gauge().labels(**smart_info_labels).set(
                                 temp_sensor_value
                             )
                 else:
                     if isinstance(smart_value, int):
                         smart_info_labels = labels.copy()
-                        smart_info_labels["info_type"] = smart_key
+                        smart_info_labels["attr_name"] = smart_key
                         get_nvme_smart_info_gauge().labels(**smart_info_labels).set(smart_value)
 
 

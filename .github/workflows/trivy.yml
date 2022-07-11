@@ -1,0 +1,33 @@
+name: trivy
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # at 4 am
+    - cron:  '0 4 * * *'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  IMAGE-REF: 'ghcr.io/philipmay/smart-prom-next:latest'
+
+jobs:
+  check:
+    name: Use Trivy
+    runs-on: ubuntu-18.04
+    steps:
+
+      # https://github.com/aquasecurity/trivy-action
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE-REF }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'

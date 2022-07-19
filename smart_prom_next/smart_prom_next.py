@@ -19,6 +19,7 @@ from prometheus_client import Counter, Gauge, start_http_server
 # Please use the appropriate get_xyz_gauge() functions.
 _TEMPERATURE_GAUGE: Optional[Gauge] = None
 _NVME_SMART_INFO_GAUGE: Optional[Gauge] = None
+_SCSI_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
@@ -90,6 +91,18 @@ def get_smart_info_gauge() -> Gauge:
             ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
         )
     return _SMART_INFO_GAUGE
+
+
+def get_scsi_smart_info_gauge() -> Gauge:
+    """Lasy init of scsi_smart_info_gauge."""
+    global _SCSI_SMART_INFO_GAUGE
+    if _SCSI_SMART_INFO_GAUGE is None:
+        _SCSI_SMART_INFO_GAUGE = Gauge(
+            "smart_prom_scsi_smart_info",
+            "scsi SMART health information log",
+            ["device", "type", "model", "serial", "attr_name", "attr_type"],
+        )
+    return _SCSI_SMART_INFO_GAUGE
 
 
 def normalize_str(the_str: str) -> str:
@@ -214,6 +227,26 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         get_nvme_smart_info_gauge().labels(**smart_info_labels).set(smart_value)
 
 
+def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
+    """Scrape sata specific info."""
+    sata_smart_info = device_info.get("scsi_error_counter_log", None)
+    if isinstance(sata_smart_info, dict):
+        for attr_type, values_dict in sata_smart_info.items():
+            if isinstance(attr_type, str) and isinstance(values_dict, dict):
+                for attr_name, value in values_dict.items():
+                    if isinstance(value, str):
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            # nothing we can do here
+                            pass
+                    if isinstance(attr_name, str) and isinstance(value, (int, float)):
+                        smart_info_labels = labels.copy()
+                        smart_info_labels["attr_name"] = attr_name
+                        smart_info_labels["attr_type"] = attr_type
+                        get_scsi_smart_info_gauge().labels(**smart_info_labels).set(value)
+
+
 def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape sat specific info."""
     sat_smart_info = device_info.get("ata_smart_attributes", None)
@@ -292,6 +325,10 @@ def scrape_metrics_for_device(
         labels=labels,
     )
     scrape_ata_metrics(
+        device_info=device_info,
+        labels=labels,
+    )
+    scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
     )

@@ -113,6 +113,34 @@ def test_scrape_ata_metrics_value():
     assert smart_prom_smart_info_gauge == 67.0
 
 
+def test_scrape_ata_metrics_raw():
+    device_info = json.loads(ATA_FAILED_PAST)
+    labels = {
+        "device": "test_device",
+        "type": normalize_str("test_type"),
+        "model": "test_model",
+        "serial": "test_serial_number",
+    }
+    scrape_ata_metrics(
+        device_info=device_info,
+        labels=labels,
+    )
+    smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_info",
+        labels={
+            "attr_id": "3",
+            "attr_name": "spin_up_time",
+            "attr_type": "raw",
+            "device": "test_device",
+            "type": normalize_str("test_type"),
+            "model": "test_model",
+            "serial": "test_serial_number",
+        },
+    )
+    assert smart_prom_smart_info_gauge is not None
+    assert smart_prom_smart_info_gauge == 10175.0
+
+
 def test_scrape_temperature():
     device_info = json.loads(ATA_FAILED_NOW)
     labels = {

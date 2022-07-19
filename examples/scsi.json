@@ -1,0 +1,85 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      2
+    ],
+    "svn_revision": "5155",
+    "platform_info": "x86_64-linux-5.10.0-0.bpo.9-amd64",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "--xall",
+      "/dev/<device name>",
+      "--json"
+    ],
+    "exit_status": 0
+  },
+  "device": {
+    "name": "/dev/<device name>",
+    "info_name": "/dev/<device name>",
+    "type": "scsi",
+    "protocol": "SCSI"
+  },
+  "vendor": "TOSHIBA",
+  "product": "<product SN>",
+  "model_name": "<model name>",
+  "revision": "6202",
+  "scsi_version": "SPC-4",
+  "user_capacity": {
+    "blocks": 11721045168,
+    "bytes": 6001175126016
+  },
+  "logical_block_size": 512,
+  "physical_block_size": 4096,
+  "rotation_rate": 7200,
+  "form_factor": {
+    "scsi_value": 2,
+    "name": "3.5 inches"
+  },
+  "serial_number": "<serial number>",
+  "device_type": {
+    "scsi_value": 0,
+    "name": "disk"
+  },
+  "local_time": {
+    "time_t": 1657788189,
+    "asctime": "Thu Jul 14 08:43:09 2022 UTC"
+  },
+  "smart_status": {
+    "passed": true
+  },
+  "temperature": {
+    "current": 27,
+    "drive_trip": 65
+  },
+  "scsi_grown_defect_list": 0,
+  "scsi_error_counter_log": {
+    "read": {
+      "errors_corrected_by_eccfast": 0,
+      "errors_corrected_by_eccdelayed": 173,
+      "errors_corrected_by_rereads_rewrites": 0,
+      "total_errors_corrected": 0,
+      "correction_algorithm_invocations": 0,
+      "gigabytes_processed": "1661147.727",
+      "total_uncorrected_errors": 0
+    },
+    "write": {
+      "errors_corrected_by_eccfast": 0,
+      "errors_corrected_by_eccdelayed": 0,
+      "errors_corrected_by_rereads_rewrites": 0,
+      "total_errors_corrected": 0,
+      "correction_algorithm_invocations": 0,
+      "gigabytes_processed": "29929.585",
+      "total_uncorrected_errors": 0
+    }
+  },
+  "power_on_time": {
+    "hours": 30307,
+    "minutes": 31
+  }
+}

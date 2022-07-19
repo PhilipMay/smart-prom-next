@@ -8,7 +8,12 @@ import json
 from json_fixtures import ATA_FAILES_NOW
 from prometheus_client import REGISTRY
 
-from smart_prom_next.smart_prom_next import normalize_str, scrape_ata_metrics, scrape_temperature
+from smart_prom_next.smart_prom_next import (
+    normalize_str,
+    scrape_ata_metrics,
+    scrape_smart_status,
+    scrape_temperature,
+)
 
 
 def test_normalize_str__happy_case():
@@ -75,3 +80,28 @@ def test_scrape_temperature():
     )
     assert smart_prom_temperature_gauge is not None
     assert smart_prom_temperature_gauge == 27
+
+
+def test_scrape_smart_status():
+    device_info = json.loads(ATA_FAILES_NOW)
+    labels = {
+        "device": "test_device",
+        "type": normalize_str("test_type"),
+        "model": "test_model",
+        "serial": "test_serial_number",
+    }
+    scrape_smart_status(
+        device_info=device_info,
+        labels=labels,
+    )
+    smart_prom_smart_status_failed_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_status_failed",
+        labels={
+            "device": "test_device",
+            "type": normalize_str("test_type"),
+            "model": "test_model",
+            "serial": "test_serial_number",
+        },
+    )
+    assert smart_prom_smart_status_failed_gauge is not None
+    assert smart_prom_smart_status_failed_gauge == 1

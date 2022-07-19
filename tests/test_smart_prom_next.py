@@ -5,7 +5,7 @@
 
 import json
 
-from json_fixtures import ATA_FAILES_NOW, NVME
+from json_fixtures import ATA_FAILED_NOW, ATA_FAILED_PAST, NVME
 from prometheus_client import REGISTRY
 
 from smart_prom_next.smart_prom_next import (
@@ -30,7 +30,7 @@ def test_normalize_str__non_str_type():
 
 
 def test_scrape_ata_metrics_failed_now():
-    device_info = json.loads(ATA_FAILES_NOW)
+    device_info = json.loads(ATA_FAILED_NOW)
     labels = {
         "device": "test_device",
         "type": normalize_str("test_type"),
@@ -54,11 +54,39 @@ def test_scrape_ata_metrics_failed_now():
         },
     )
     assert smart_prom_smart_info_gauge is not None
-    assert smart_prom_smart_info_gauge == 1
+    assert smart_prom_smart_info_gauge == 1.0
+
+
+def test_scrape_ata_metrics_failed_past():
+    device_info = json.loads(ATA_FAILED_PAST)
+    labels = {
+        "device": "test_device",
+        "type": normalize_str("test_type"),
+        "model": "test_model",
+        "serial": "test_serial_number",
+    }
+    scrape_ata_metrics(
+        device_info=device_info,
+        labels=labels,
+    )
+    smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_info",
+        labels={
+            "attr_id": "3",
+            "attr_name": "spin_up_time",
+            "attr_type": "failed_past",
+            "device": "test_device",
+            "type": normalize_str("test_type"),
+            "model": "test_model",
+            "serial": "test_serial_number",
+        },
+    )
+    assert smart_prom_smart_info_gauge is not None
+    assert smart_prom_smart_info_gauge == 1.0
 
 
 def test_scrape_temperature():
-    device_info = json.loads(ATA_FAILES_NOW)
+    device_info = json.loads(ATA_FAILED_NOW)
     labels = {
         "device": "test_device",
         "type": normalize_str("test_type"),
@@ -80,11 +108,11 @@ def test_scrape_temperature():
         },
     )
     assert smart_prom_temperature_gauge is not None
-    assert smart_prom_temperature_gauge == 27
+    assert smart_prom_temperature_gauge == 27.0
 
 
 def test_scrape_smart_status():
-    device_info = json.loads(ATA_FAILES_NOW)
+    device_info = json.loads(ATA_FAILED_NOW)
     labels = {
         "device": "test_device",
         "type": normalize_str("test_type"),
@@ -105,7 +133,7 @@ def test_scrape_smart_status():
         },
     )
     assert smart_prom_smart_status_failed_gauge is not None
-    assert smart_prom_smart_status_failed_gauge == 1
+    assert smart_prom_smart_status_failed_gauge == 1.0
 
 
 def test_scrape_nvme_metrics():
@@ -131,4 +159,4 @@ def test_scrape_nvme_metrics():
         },
     )
     assert smart_prom_nvme_smart_info_gauge is not None
-    assert smart_prom_nvme_smart_info_gauge == 132
+    assert smart_prom_nvme_smart_info_gauge == 132.0

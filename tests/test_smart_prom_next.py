@@ -5,12 +5,13 @@
 
 import json
 
-from json_fixtures import ATA_FAILES_NOW
+from json_fixtures import ATA_FAILES_NOW, NVME
 from prometheus_client import REGISTRY
 
 from smart_prom_next.smart_prom_next import (
     normalize_str,
     scrape_ata_metrics,
+    scrape_nvme_metrics,
     scrape_smart_status,
     scrape_temperature,
 )
@@ -105,3 +106,29 @@ def test_scrape_smart_status():
     )
     assert smart_prom_smart_status_failed_gauge is not None
     assert smart_prom_smart_status_failed_gauge == 1
+
+
+def test_scrape_nvme_metrics():
+    device_info = json.loads(NVME)
+    labels = {
+        "device": "test_device",
+        "type": normalize_str("test_type"),
+        "model": "test_model",
+        "serial": "test_serial_number",
+    }
+    scrape_nvme_metrics(
+        device_info=device_info,
+        labels=labels,
+    )
+    smart_prom_nvme_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_nvme_smart_info",
+        labels={
+            "attr_name": "unsafe_shutdowns",
+            "device": "test_device",
+            "type": normalize_str("test_type"),
+            "model": "test_model",
+            "serial": "test_serial_number",
+        },
+    )
+    assert smart_prom_nvme_smart_info_gauge is not None
+    assert smart_prom_nvme_smart_info_gauge == 132

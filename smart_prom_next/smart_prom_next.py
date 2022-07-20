@@ -175,7 +175,7 @@ def scan_devices() -> List[Dict[str, str]]:
     Returns:
         The ``name`` key contains the device name.
     """
-    results_json, _ = call_smartctl(["--scan-open", "--json"])  # TODO: what happens if _ != 0
+    results_json, _ = call_smartctl(["--scan-open", "--json"])
     results = json.loads(results_json)
     devices = results.get("devices", [])
     assert isinstance(devices, list)
@@ -195,11 +195,11 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
 def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
-    if isinstance(temperature, dict):  # TODO: what is not?
+    if isinstance(temperature, dict):  # TODO: what if not?
         for temperature_type, temperature_value in temperature.items():
             if isinstance(temperature_type, str) and isinstance(
                 temperature_value, int
-            ):  # TODO: what is not?
+            ):  # TODO: what if not?
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
                 get_temperature_gauge().labels(**temperature_labels).set(temperature_value)
@@ -339,10 +339,10 @@ def refresh_metrics() -> None:
     devices = scan_devices()
     for device in devices:
         device_name = device.get("name", None)
-        if isinstance(device_name, str) and len(device_name) > 0:  # TODO: what is not?
+        if isinstance(device_name, str) and len(device_name) > 0:  # TODO: what if not?
             device_info_json, returncode = call_smartctl(["--xall", "--json", device_name])
             device_type = device.get("type", None)
-            if isinstance(device_type, str):  # TODO: what is not?
+            if isinstance(device_type, str):  # TODO: what if not?
                 scrape_metrics_for_device(
                     device_name, device_type, device_info_json, returncode=returncode
                 )

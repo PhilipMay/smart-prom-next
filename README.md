@@ -157,6 +157,16 @@ groups:
           summary: "SMART status failing"
 ```
 
+## Special Thanks
+
+A special thanks goes to the following contributors:
+
+- [Jopaul-John](https://github.com/Jopaul-John) for his help in
+  [adding scsi disk handling](https://github.com/PhilipMay/smart-prom-next/issues/12)
+- [Michal Harakal](https://github.com/michalharakal)
+  for the first PR of this project to
+  [improve the docker-compose example](https://github.com/PhilipMay/smart-prom-next/pull/29)
+
 ## Licensing
 
 Copyright (c) 2022 Philip May

@@ -167,6 +167,23 @@ groups:
           summary: "SMART status failing"
 ```
 
+## Release History
+
+**2022-07-20 with version `0.0.3`**<br/>
+
+- [add scsi disk handling](https://github.com/PhilipMay/smart-prom-next/issues/12) - thanks to
+  [Jopaul-John](https://github.com/Jopaul-John)
+
+**2022-06-23 with version `0.0.2`**<br/>
+
+- breaking change on `smart_prom_nvme_smart_info`
+- additional `smart_prom_scrape_iterations_total` metric
+- more doc
+
+**2022-06-20 with pre-release version `0.0.1rc9`**<br/>
+
+- first pre-release
+
 ## Special Thanks
 
 A special thanks goes to the following contributors:

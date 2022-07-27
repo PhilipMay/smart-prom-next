@@ -146,7 +146,7 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
                     else "not set"
                 )
                 print(
-                    f"Calling {args} resturned non zero returncode! "
+                    f"Calling {args} returned non zero returncode! "
                     f"returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )
 
@@ -156,7 +156,7 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
                 return result, returncode
             else:
                 raise Exception(
-                    f"Calling {args} resturned no result! "
+                    f"Calling {args} returned no result! "
                     f"returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )
 

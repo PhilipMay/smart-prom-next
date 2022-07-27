@@ -18,11 +18,11 @@ Currently, smart-prom-next is only
 [available as a docker image](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next).
 The base is built from the slim version of the [official Python Docker image](https://hub.docker.com/_/python),
 which uses [Debian Bullseye](https://www.debian.org/releases/bullseye/).
-It is built for multiple platforms:</br>
+It is built for multiple platforms:\
 linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
 
-The second option is also an [Alpine](https://www.alpinelinux.org/) based image.
-It is built for multiple platforms:</br>
+The second option is an [Alpine](https://www.alpinelinux.org/) based image.
+It is built for multiple platforms:\
 linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8
 
 ## Configuration Options / Environment Variables
@@ -181,18 +181,18 @@ groups:
 
 ## Release History
 
-**2022-07-20 with version `0.0.3`**<br/>
+**2022-07-20 with version `0.0.3`**
 
 - [add scsi disk handling](https://github.com/PhilipMay/smart-prom-next/issues/12) - thanks to
   [Jopaul-John](https://github.com/Jopaul-John)
 
-**2022-06-23 with version `0.0.2`**<br/>
+**2022-06-23 with version `0.0.2`**
 
 - breaking change on `smart_prom_nvme_smart_info`
 - additional `smart_prom_scrape_iterations_total` metric
 - more doc
 
-**2022-06-20 with pre-release version `0.0.1rc9`**<br/>
+**2022-06-20 with pre-release version `0.0.1rc9`**
 
 - first pre-release
 

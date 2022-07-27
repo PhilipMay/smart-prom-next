@@ -205,11 +205,13 @@ groups:
 
 A special thanks goes to the following contributors:
 
-- [Jopaul-John](https://github.com/Jopaul-John) for his help in
+- [@Jopaul-John](https://github.com/Jopaul-John) for his help in
   [adding scsi disk handling](https://github.com/PhilipMay/smart-prom-next/issues/12)
-- [Michal Harakal](https://github.com/michalharakal)
+- [Michal Harakal (@michalharakal)](https://github.com/michalharakal)
   for the first PR of this project to
   [improve the docker-compose example](https://github.com/PhilipMay/smart-prom-next/pull/29)
+- [Diego Heras (@ngosang)](https://github.com/ngosang) for his
+  [help in adding the Alpine image](https://github.com/PhilipMay/smart-prom-next/issues/40#issuecomment-1197198019)
 
 ## Licensing
 

@@ -1,5 +1,5 @@
 # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
-name: Docker build and publish
+name: Docker build and publish Alpine version
 
 on:
   release:
@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  build-and-push-alpine-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,18 +51,17 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
-            latest=true
+            latest=false
             prefix=
-            suffix=
+            suffix=-alpine
 
       - name: Build and push Docker image
         # https://github.com/docker/build-push-action
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
-#          platforms: linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8, linux/mips64le, linux/ppc64le, linux/s390x
-          platforms: linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
+          file: ./DockerfileAlpine
+          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

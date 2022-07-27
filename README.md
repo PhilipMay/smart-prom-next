@@ -21,6 +21,10 @@ which uses [Debian Bullseye](https://www.debian.org/releases/bullseye/).
 It is built for multiple platforms:</br>
 linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
 
+The second option is also an [Alpine](https://www.alpinelinux.org/) based image.
+It is built for multiple platforms:</br>
+linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8
+
 ## Configuration Options / Environment Variables
 
 smart-prom-next can be configured by the following environment variables:
@@ -31,6 +35,14 @@ smart-prom-next can be configured by the following environment variables:
 
 ## Docker / docker-compose
 
+The images, which are based on Debian Bullseye slim, can be accessed using:
+`ghcr.io/philipmay/smart-prom-next:<version>` or `ghcr.io/philipmay/smart-prom-next:latest`
+
+The images, which are based on Alpine, can be accessed using: `ghcr.io/philipmay/smart-prom-next:<version>-alpine`
+
+The latest versions are visible in
+[smart-prom-next GitHub packages](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next).
+
 Below is an example of a complete minimal `docker-compose.yml`, how smart-prom-next can be used with [docker-compose](https://docs.docker.com/compose/):
 
 ```yaml
@@ -38,7 +50,7 @@ version: "3.0"
 services:
   smart-prom-next:
     # see https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next
-    image: ghcr.io/philipmay/smart-prom-next:0.0.1
+    image: ghcr.io/philipmay/smart-prom-next:latest
     container_name: "smart-prom-next"
     restart: unless-stopped
     privileged: true

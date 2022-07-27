@@ -181,6 +181,11 @@ groups:
 
 ## Release History
 
+**2022-07-27 with pre-release version `0.0.4rc1`**
+
+- add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40)
+- fix typo [#42](https://github.com/PhilipMay/smart-prom-next/issues/42)
+
 **2022-07-20 with version `0.0.3`**
 
 - [add scsi disk handling](https://github.com/PhilipMay/smart-prom-next/issues/12) - thanks to

@@ -361,7 +361,8 @@ def main() -> None:
 
     smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
     print(
-        f"INFO: Enter metrics refresh loop. smart_info_refresh_interval: {smart_info_refresh_interval}"
+        f"INFO: Enter metrics refresh loop. "
+        f"smart_info_refresh_interval: {smart_info_refresh_interval}"
     )
 
     while True:

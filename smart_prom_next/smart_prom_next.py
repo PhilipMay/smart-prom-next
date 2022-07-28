@@ -125,7 +125,7 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
     args = ["smartctl"]
     args.extend(options)
     if first_scrape_interval:
-        print(f"Debug output of the first scraping iteration: call: {args}")
+        print(f"DEBUG: Output of the first scraping iteration: call: {args}")
     try:
         with Popen(args, stdout=PIPE, stderr=PIPE) as popen:
             stdout, stderr = popen.communicate()
@@ -146,13 +146,15 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
                     else "not set"
                 )
                 print(
-                    f"Calling {args} returned non zero returncode! "
-                    f"returncode: {popen.returncode} stderr: '{stderr_text}'"
+                    f"WARNING: Calling {args} returned non zero returncode! "
+                    f"returncode: {popen.returncode} stderr: '{stderr_text}' "
+                    "This is only a warning. Not an error. "
+                    "smartctl permits a non-zero return code even under normal circumstances."
                 )
 
             if isinstance(result, str) and len(result) > 0:  # we have a result
                 if first_scrape_interval:
-                    print(f"Debug output of the first scraping iteration: result: {result}")
+                    print(f"DEBUG: Output of the first scraping iteration: result: {result}")
                 return result, returncode
             else:
                 raise Exception(
@@ -162,7 +164,7 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
 
     except FileNotFoundError:
         print(
-            "The smartctl program cannot be found. "
+            "ERROR: The smartctl program cannot be found. "
             "Maybe smartctl (smartmontools) still needs to be installed.",
             file=sys.stderr,
         )
@@ -351,15 +353,15 @@ def refresh_metrics() -> None:
 def main() -> None:
     """Main function."""
     global first_scrape_interval
-    print("Start smart-prom-next.")
+    print("INFO: Start smart-prom-next.")
 
     prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
-    print(f"Start prometheus client. port: {prometheus_client_port}")
+    print(f"INFO: Start prometheus client. port: {prometheus_client_port}")
     start_http_server(prometheus_client_port)
 
     smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
     print(
-        f"Enter metrics refresh loop. smart_info_refresh_interval: {smart_info_refresh_interval}"
+        f"INFO: Enter metrics refresh loop. smart_info_refresh_interval: {smart_info_refresh_interval}"
     )
 
     while True:

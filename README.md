@@ -36,7 +36,7 @@ smart-prom-next can be configured by the following environment variables:
 ## Docker / docker-compose
 
 The images, which are based on Debian Bullseye slim, can be accessed using:
-`ghcr.io/philipmay/smart-prom-next:<version>` or `ghcr.io/philipmay/smart-prom-next:latest`
+`ghcr.io/philipmay/smart-prom-next:<version>-slim-bullseye` or `ghcr.io/philipmay/smart-prom-next:latest`
 
 The images, which are based on Alpine, can be accessed using: `ghcr.io/philipmay/smart-prom-next:<version>-alpine`
 

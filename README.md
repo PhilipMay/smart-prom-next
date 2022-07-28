@@ -181,6 +181,14 @@ groups:
 
 ## Release History
 
+**2022-07-28 wit version `0.0.4`**
+
+- add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40)
+- fix typo [#42](https://github.com/PhilipMay/smart-prom-next/issues/42)
+- make Alpine image smaller [#45](https://github.com/PhilipMay/smart-prom-next/issues/45)
+- add -slim-bullseye suffix to image [#44](https://github.com/PhilipMay/smart-prom-next/issues/44)
+- improve logs with "error" and "warning" prefix [#43](https://github.com/PhilipMay/smart-prom-next/issues/43)
+
 **2022-07-27 with pre-release version `0.0.4rc1`**
 
 - add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40)

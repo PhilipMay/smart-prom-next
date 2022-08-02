@@ -11,7 +11,18 @@ import setuptools
 
 project_name = "smart_prom_next"
 source_code = "https://github.com/PhilipMay/smart-prom-next"
-keywords = ("prometheus", "smart", "docker", "kubernetes", "monitoring", "metrics", "grafana")
+keywords = (
+    "prometheus",
+    "smart",
+    "docker",
+    "kubernetes",
+    "monitoring",
+    "metrics",
+    "grafana",
+    "hdd",
+    "ssd",
+    "hard disk",
+)
 install_requires = ["prometheus-client"]
 extras_require = {
     "checking": [
@@ -52,7 +63,7 @@ setuptools.setup(
     version=get_version(),
     maintainer="Philip May",
     author="Philip May",
-    author_email="philip@mayla",
+    author_email="philip@may.la",
     description=" S.M.A.R.T. Prometheus Metrics Exporter",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -67,6 +78,7 @@ setuptools.setup(
     extras_require=extras_require,
     keywords=keywords,
     entry_points={"console_scripts": ["smart-prom-next = smart_prom_next:cli_main"]},
+    # https://pypi.org/classifiers/
     classifiers=[
         "Development Status :: 3 - Alpha",
         # "Development Status :: 4 - Beta",
@@ -78,5 +90,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3 :: Only",
+        "Topic :: System :: Monitoring",
+        "Topic :: System :: Systems Administration",
     ],
 )

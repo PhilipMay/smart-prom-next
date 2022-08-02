@@ -3,7 +3,10 @@
 [![MIT License](https://img.shields.io/github/license/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/blob/main/LICENSE)
 [![pytest status](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml)
 [![Static Code Checks status](https://github.com/PhilipMay/smart-prom-next/actions/workflows/static_checks.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/static_checks.yml)
-[![GitHub issues](https://img.shields.io/github/issues-raw/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/issues)
+[![GitHub issues](https://img.shields.io/github/issues-raw/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/issues)\
+[![Docker build Debian image](https://github.com/PhilipMay/smart-prom-next/actions/workflows/docker-build-debian.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/docker-build-debian.yml)
+[![Docker build Alpine image](https://github.com/PhilipMay/smart-prom-next/actions/workflows/docker-build-alpine.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/docker-build-alpine.yml)
+[![trivy](https://github.com/PhilipMay/smart-prom-next/actions/workflows/trivy.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/trivy.yml)
 
 smart-prom-next is a [Prometheus](https://prometheus.io/docs/introduction/overview/) metric exporter for
 [S.M.A.R.T.](https://en.wikipedia.org/wiki/S.M.A.R.T.) values of hard disks.

@@ -12,7 +12,8 @@ ADD . /app
 RUN apt-get update && \
     apt-get -y install smartmontools && \
     pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -e .
+    pip install --no-cache-dir -e . && \
+    rm -rf /var/lib/apt/lists/*
 
 EXPOSE 9902
 

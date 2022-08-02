@@ -12,7 +12,7 @@ ADD . /app
 RUN apk add smartmontools && \
     pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -e . && \
-    rm -rf /root/.cache/
+    rm -rf /var/cache/apk/*
 
 EXPOSE 9902
 

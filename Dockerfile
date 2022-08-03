@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/python
-FROM python:3.10.5-slim-bullseye
+FROM python:3.10.6-slim-bullseye
 
 # fix for "[BUG] no output in docker logs #13"
 # see https://github.com/PhilipMay/smart-prom-next/issues/13

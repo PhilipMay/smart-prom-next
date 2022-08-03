@@ -19,14 +19,18 @@ are used to read out the hard disk values. These are then exposed using
 According to Wikipedia, the primary function of S.M.A.R.T. is to detect and report various indicators of drive
 reliability with the intent of anticipating imminent hardware failures.
 
-Currently, smart-prom-next is only
-[available as a docker image](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next).
-The base is built from the slim version of the [official Python Docker image](https://hub.docker.com/_/python),
+Currently, smart-prom-next is available as a
+[docker image](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next) and a
+[pypi package](https://pypi.org/project/smart-prom-next/).
+
+The Docker image is built from the slim version of the [official Python Docker image](https://hub.docker.com/_/python),
 which uses [Debian Bullseye](https://www.debian.org/releases/bullseye/).
 It is built for multiple platforms:\
 linux/386, linux/amd64, linux/arm/v5, linux/arm/v7, linux/arm64/v8
 
-The second option is an [Alpine](https://www.alpinelinux.org/) based image.
+The second Docker option is also built from the
+[official Python Docker image](https://hub.docker.com/_/python),
+but uses [Alpine](https://www.alpinelinux.org/).
 It is built for multiple platforms:\
 linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8
 

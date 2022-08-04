@@ -1,6 +1,8 @@
 # https://hub.docker.com/_/python
 FROM python:3.10.6-slim-bullseye
 
+LABEL maintainer="Philip May <philip@may.la>"
+
 # fix for "[BUG] no output in docker logs #13"
 # see https://github.com/PhilipMay/smart-prom-next/issues/13
 ENV PYTHONUNBUFFERED=1

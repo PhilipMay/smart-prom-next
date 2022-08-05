@@ -1,8 +1,9 @@
 # S.M.A.R.T. Prometheus Metrics Exporter
 
+[![Docker images](https://img.shields.io/badge/Docker-image-blue)](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next)
+[![pypi](https://img.shields.io/pypi/v/smart-prom-next.svg)](https://pypi.python.org/pypi/smart-prom-next)\
 [![MIT License](https://img.shields.io/github/license/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/blob/main/LICENSE)
 [![Python Version](https://img.shields.io/pypi/pyversions/smart-prom-next)](https://www.python.org)
-[![pypi](https://img.shields.io/pypi/v/smart-prom-next.svg)](https://pypi.python.org/pypi/smart-prom-next)
 [![GitHub issues](https://img.shields.io/github/issues-raw/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/issues)\
 [![pytest status](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml)
 [![Static Code Checks status](https://github.com/PhilipMay/smart-prom-next/actions/workflows/static_checks.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/static_checks.yml)\

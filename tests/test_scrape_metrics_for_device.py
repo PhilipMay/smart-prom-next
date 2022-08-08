@@ -46,7 +46,7 @@ def test_scrape_metrics_for_device_ata():
     smart_prom_temperature_gauge = REGISTRY.get_sample_value(
         "smart_prom_temperature",
         labels={
-            'temperature_type': 'current',
+            "temperature_type": "current",
             "device": "test_device",
             "type": "test_type",
             "model": "SAMSUNG HD204UI",

@@ -12,6 +12,7 @@ from prometheus_client import REGISTRY
 from smart_prom_next.smart_prom_next import (
     normalize_str,
     scrape_ata_metrics,
+    scrape_metrics_for_device,
     scrape_nvme_metrics,
     scrape_scsi_metrics,
     scrape_smart_status,
@@ -299,3 +300,241 @@ def test_scrape_scsi_metrics_read_int():
     )
     assert smart_prom_scsi_smart_info_gauge is not None
     assert isclose(smart_prom_scsi_smart_info_gauge, 173.0)
+
+
+def test_scrape_metrics_for_device_nvme():
+    scrape_metrics_for_device(
+        device_name="test_device",
+        device_type="test_type",
+        device_info_json=NVME,
+        returncode=99,
+    )
+
+    # test scrape_nvme_metrics - normal case
+    smart_prom_nvme_smart_info_gause = REGISTRY.get_sample_value(
+        "smart_prom_nvme_smart_info",
+        labels={
+            "attr_name": "data_units_written",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "KXG6AZNV512G TOSHIBA",
+            "serial": "Y9SF71LHFWZL",
+        },
+    )
+    assert smart_prom_nvme_smart_info_gause is not None
+    assert isclose(smart_prom_nvme_smart_info_gause, 13927418.0)
+
+    # test scrape_nvme_metrics - temperature case
+    smart_prom_nvme_smart_info_gause = REGISTRY.get_sample_value(
+        "smart_prom_nvme_smart_info",
+        labels={
+            "attr_name": "temperature_sensors_1",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "KXG6AZNV512G TOSHIBA",
+            "serial": "Y9SF71LHFWZL",
+        },
+    )
+    assert smart_prom_nvme_smart_info_gause is not None
+    assert isclose(smart_prom_nvme_smart_info_gause, 35.0)
+
+    # test scrape_temperature
+    smart_prom_temperature_gauge = REGISTRY.get_sample_value(
+        "smart_prom_temperature",
+        labels={
+            "temperature_type": "current",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "KXG6AZNV512G TOSHIBA",
+            "serial": "Y9SF71LHFWZL",
+        },
+    )
+    assert smart_prom_temperature_gauge is not None
+    assert isclose(smart_prom_temperature_gauge, 35.0)
+
+    # test scrape_smart_status
+    smart_prom_smart_status_failed_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_status_failed",
+        labels={
+            "device": "test_device",
+            "type": "test_type",
+            "model": "KXG6AZNV512G TOSHIBA",
+            "serial": "Y9SF71LHFWZL",
+        },
+    )
+    assert smart_prom_smart_status_failed_gauge is not None
+    assert isclose(smart_prom_smart_status_failed_gauge, 0.0)
+
+    # test smart_prom_smartctl_exit_status
+    smart_prom_smartctl_exit_status_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smartctl_exit_status",
+        labels={
+            "device": "test_device",
+            "type": "test_type",
+            "model": "KXG6AZNV512G TOSHIBA",
+            "serial": "Y9SF71LHFWZL",
+        },
+    )
+    assert smart_prom_smartctl_exit_status_gauge is not None
+    assert isclose(smart_prom_smartctl_exit_status_gauge, 99.0)
+
+
+def test_scrape_metrics_for_device_ata():
+    scrape_metrics_for_device(
+        device_name="test_device",
+        device_type="test_type",
+        device_info_json=ATA_FAILED_PAST,
+        returncode=99,
+    )
+
+    # test scrape_ata_metrics - failed past
+    smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_info",
+        labels={
+            "attr_id": "3",
+            "attr_name": "spin_up_time",
+            "attr_type": "failed_past",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "SAMSUNG HD204UI",
+            "serial": "S2H7J9FB203635",
+        },
+    )
+    assert smart_prom_smart_info_gauge is not None
+    assert isclose(smart_prom_smart_info_gauge, 1.0)
+
+    # test scrape_ata_metrics - thresh
+    smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_info",
+        labels={
+            "attr_id": "5",
+            "attr_name": "reallocated_sector_ct",
+            "attr_type": "thresh",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "SAMSUNG HD204UI",
+            "serial": "S2H7J9FB203635",
+        },
+    )
+    assert smart_prom_smart_info_gauge is not None
+    assert isclose(smart_prom_smart_info_gauge, 10.0)
+
+    # test scrape_ata_metrics - raw
+    smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_info",
+        labels={
+            "attr_id": "9",
+            "attr_name": "power_on_hours",
+            "attr_type": "raw",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "SAMSUNG HD204UI",
+            "serial": "S2H7J9FB203635",
+        },
+    )
+    assert smart_prom_smart_info_gauge is not None
+    assert isclose(smart_prom_smart_info_gauge, 3830.0)
+
+    # test scrape_temperature
+    smart_prom_temperature_gauge = REGISTRY.get_sample_value(
+        "smart_prom_temperature",
+        labels={
+            "temperature_type": "current",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "SAMSUNG HD204UI",
+            "serial": "S2H7J9FB203635",
+        },
+    )
+    assert smart_prom_temperature_gauge is not None
+    assert isclose(smart_prom_temperature_gauge, 27.0)
+
+    # test scrape_smart_status
+    smart_prom_smart_status_failed_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_status_failed",
+        labels={
+            "device": "test_device",
+            "type": "test_type",
+            "model": "SAMSUNG HD204UI",
+            "serial": "S2H7J9FB203635",
+        },
+    )
+    assert smart_prom_smart_status_failed_gauge is not None
+    assert isclose(smart_prom_smart_status_failed_gauge, 0.0)
+
+    # test smart_prom_smartctl_exit_status
+    smart_prom_smartctl_exit_status_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smartctl_exit_status",
+        labels={
+            "device": "test_device",
+            "type": "test_type",
+            "model": "SAMSUNG HD204UI",
+            "serial": "S2H7J9FB203635",
+        },
+    )
+    assert smart_prom_smartctl_exit_status_gauge is not None
+    assert isclose(smart_prom_smartctl_exit_status_gauge, 99.0)
+
+
+def test_scrape_metrics_for_device_scsi():
+    scrape_metrics_for_device(
+        device_name="test_device",
+        device_type="test_type",
+        device_info_json=SCSI,
+        returncode=99,
+    )
+
+    # test scrape_ata_metrics
+    smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
+        "smart_prom_scsi_smart_info",
+        labels={
+            "attr_name": "errors_corrected_by_eccdelayed",
+            "attr_type": "read",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "<model name>",
+            "serial": "<serial number>",
+        },
+    )
+    assert smart_prom_smart_info_gauge is not None
+    assert isclose(smart_prom_smart_info_gauge, 173.0)
+
+    # test scrape_temperature
+    smart_prom_temperature_gauge = REGISTRY.get_sample_value(
+        "smart_prom_temperature",
+        labels={
+            "temperature_type": "current",
+            "device": "test_device",
+            "type": "test_type",
+            "model": "<model name>",
+            "serial": "<serial number>",
+        },
+    )
+    assert smart_prom_temperature_gauge is not None
+    assert isclose(smart_prom_temperature_gauge, 27.0)
+
+    # test scrape_smart_status
+    smart_prom_smart_status_failed_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smart_status_failed",
+        labels={
+            "device": "test_device",
+            "type": "test_type",
+            "model": "<model name>",
+            "serial": "<serial number>",
+        },
+    )
+    assert smart_prom_smart_status_failed_gauge is not None
+    assert isclose(smart_prom_smart_status_failed_gauge, 0.0)
+
+    # test smart_prom_smartctl_exit_status
+    smart_prom_smartctl_exit_status_gauge = REGISTRY.get_sample_value(
+        "smart_prom_smartctl_exit_status",
+        labels={
+            "device": "test_device",
+            "type": "test_type",
+            "model": "<model name>",
+            "serial": "<serial number>",
+        },
+    )
+    assert smart_prom_smartctl_exit_status_gauge is not None
+    assert isclose(smart_prom_smartctl_exit_status_gauge, 99.0)

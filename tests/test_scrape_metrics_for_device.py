@@ -26,7 +26,7 @@ def test_scrape_metrics_for_device_ata():
     assert "smart_prom_scsi_smart_info" not in metric_names
     assert "smart_prom_smart_info" in metric_names
 
-    # test scrape_smart_status
+    # test scrape_ata_metrics
     smart_prom_smart_info_gauge = REGISTRY.get_sample_value(
         "smart_prom_smart_info",
         labels={
@@ -55,3 +55,7 @@ def test_scrape_metrics_for_device_ata():
     )
     assert smart_prom_temperature_gauge is not None
     assert isclose(smart_prom_temperature_gauge, 27.0)
+
+    # test scrape_smart_status
+
+    # test smart_prom_smartctl_exit_status

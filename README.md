@@ -189,20 +189,14 @@ groups:
           summary: "SMART status failing"
 ```
 
-## Release History
+## Release News
+Important news about the releases:
 
 **2022-07-28 with version `0.0.4`**
 
 - add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40)
-- fix typo [#42](https://github.com/PhilipMay/smart-prom-next/issues/42)
-- make Alpine image smaller [#45](https://github.com/PhilipMay/smart-prom-next/issues/45)
 - add -slim-bullseye suffix to image [#44](https://github.com/PhilipMay/smart-prom-next/issues/44)
 - improve logs with "error" and "warning" prefix [#43](https://github.com/PhilipMay/smart-prom-next/issues/43)
-
-**2022-07-27 with pre-release version `0.0.4rc1`**
-
-- add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40)
-- fix typo [#42](https://github.com/PhilipMay/smart-prom-next/issues/42)
 
 **2022-07-20 with version `0.0.3`**
 
@@ -213,7 +207,6 @@ groups:
 
 - breaking change on `smart_prom_nvme_smart_info`
 - additional `smart_prom_scrape_iterations_total` metric
-- more doc
 
 **2022-06-20 with pre-release version `0.0.1rc9`**
 

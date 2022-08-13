@@ -351,11 +351,10 @@ def refresh_metrics() -> None:
         device_name = device.get("name", None)
         if isinstance(device_name, str) and len(device_name) > 0:
             device_info_json, returncode = call_smartctl(["--xall", "--json", device_name])
-            device_type = device.get("type", None)
-            if isinstance(device_type, str):
-                scrape_metrics_for_device(
-                    device_name, device_type, device_info_json, returncode=returncode
-                )
+            device_type = str(device.get("type", "unknown"))
+            scrape_metrics_for_device(
+                device_name, device_type, device_info_json, returncode=returncode
+            )
         else:
             print(
                 f"WARNING: Device name is present but cannot read the value! "

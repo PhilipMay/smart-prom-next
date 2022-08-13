@@ -187,24 +187,32 @@ def scan_devices() -> List[Dict[str, str]]:
 def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape SMART status."""
     smart_status = device_info.get("smart_status", None)
-    if isinstance(smart_status, dict):  # TODO: add warning when else?
+    if isinstance(smart_status, dict):
         smart_status_passed = smart_status.get("passed", None)
-        if isinstance(smart_status_passed, bool):  # TODO: add warning when else?
+        if isinstance(smart_status_passed, bool):
             smart_status_failed_value = 0 if smart_status_passed else 1
             get_smart_status_failed_gauge().labels(**labels).set(smart_status_failed_value)
+        else:
+            print(
+                f"WARNING: SMART status is present but cannot read the value! "
+                f"smart_status_passed: {smart_status_passed}"
+            )
 
 
 def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
     """Scrape temperature status."""
     temperature = device_info.get("temperature", None)
-    if isinstance(temperature, dict):  # TODO: what if not?
+    if isinstance(temperature, dict):
         for temperature_type, temperature_value in temperature.items():
-            if isinstance(temperature_type, str) and isinstance(
-                temperature_value, int
-            ):  # TODO: what if not?
+            if isinstance(temperature_type, str) and isinstance(temperature_value, int):
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
                 get_temperature_gauge().labels(**temperature_labels).set(temperature_value)
+            else:
+                print(
+                    f"WARNING: Temperature is present but cannot read the value! "
+                    f"temperature_type: {temperature_type} temperature_value: {temperature_value}"
+                )
 
 
 def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -341,13 +349,18 @@ def refresh_metrics() -> None:
     devices = scan_devices()
     for device in devices:
         device_name = device.get("name", None)
-        if isinstance(device_name, str) and len(device_name) > 0:  # TODO: what if not?
+        if isinstance(device_name, str) and len(device_name) > 0:
             device_info_json, returncode = call_smartctl(["--xall", "--json", device_name])
             device_type = device.get("type", None)
-            if isinstance(device_type, str):  # TODO: what if not?
+            if isinstance(device_type, str):
                 scrape_metrics_for_device(
                     device_name, device_type, device_info_json, returncode=returncode
                 )
+        else:
+            print(
+                f"WARNING: Device name is present but cannot read the value! "
+                f"device_name: {device_name}"
+            )
 
 
 def main() -> None:

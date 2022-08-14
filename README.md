@@ -190,6 +190,7 @@ groups:
 ```
 
 ## Release News
+
 Important news about the releases:
 
 **2022-07-28 with version `0.0.4`**

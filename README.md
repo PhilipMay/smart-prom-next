@@ -3,6 +3,7 @@
 [![Docker images](https://img.shields.io/badge/Docker-image-blue)](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next)
 [![pypi](https://img.shields.io/pypi/v/smart-prom-next.svg)](https://pypi.python.org/pypi/smart-prom-next)\
 [![MIT License](https://img.shields.io/github/license/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/blob/main/LICENSE)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://github.com/PhilipMay/smart-prom-next/blob/main/CODE_OF_CONDUCT.md) 
 [![Python Version](https://img.shields.io/pypi/pyversions/smart-prom-next)](https://www.python.org)
 [![GitHub issues](https://img.shields.io/github/issues-raw/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/issues)\
 [![pytest status](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml)

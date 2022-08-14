@@ -3,7 +3,7 @@
 [![Docker images](https://img.shields.io/badge/Docker-image-blue)](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next)
 [![pypi](https://img.shields.io/pypi/v/smart-prom-next.svg)](https://pypi.python.org/pypi/smart-prom-next)\
 [![MIT License](https://img.shields.io/github/license/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/blob/main/LICENSE)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://github.com/PhilipMay/smart-prom-next/blob/main/CODE_OF_CONDUCT.md) 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](https://github.com/PhilipMay/smart-prom-next/blob/main/CODE_OF_CONDUCT.md)
 [![Python Version](https://img.shields.io/pypi/pyversions/smart-prom-next)](https://www.python.org)
 [![GitHub issues](https://img.shields.io/github/issues-raw/PhilipMay/smart-prom-next)](https://github.com/PhilipMay/smart-prom-next/issues)\
 [![pytest status](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml/badge.svg)](https://github.com/PhilipMay/smart-prom-next/actions/workflows/pytest.yml)
@@ -192,27 +192,25 @@ groups:
 
 ## Release News
 
-Important news about the releases:
+**Here you can find the latest versions of the software:**
 
-**2022-07-28 with version `0.0.4`**
+- [docker image (Debian and Alpine)](https://github.com/PhilipMay/smart-prom-next/pkgs/container/smart-prom-next)
+- [pypi package](https://pypi.org/project/smart-prom-next/)
+- [GitHub releases](https://github.com/PhilipMay/smart-prom-next/releases)
 
-- add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40)
-- add -slim-bullseye suffix to image [#44](https://github.com/PhilipMay/smart-prom-next/issues/44)
-- improve logs with "error" and "warning" prefix [#43](https://github.com/PhilipMay/smart-prom-next/issues/43)
+**Important news and features in the releases:**
 
-**2022-07-20 with version `0.0.3`**
-
+- add additional Alpine based image [#40](https://github.com/PhilipMay/smart-prom-next/issues/40) -
+  version `0.0.4` at 2022-07-28
+- add -slim-bullseye suffix to image [#44](https://github.com/PhilipMay/smart-prom-next/issues/44) -
+  version `0.0.4` at 2022-07-28
+- improve logs with "error" and "warning" prefix [#43](https://github.com/PhilipMay/smart-prom-next/issues/43) -
+  version `0.0.4` at 2022-07-28
 - [add scsi disk handling](https://github.com/PhilipMay/smart-prom-next/issues/12) - thanks to
-  [Jopaul-John](https://github.com/Jopaul-John)
-
-**2022-06-23 with version `0.0.2`**
-
-- breaking change on `smart_prom_nvme_smart_info`
-- additional `smart_prom_scrape_iterations_total` metric
-
-**2022-06-20 with pre-release version `0.0.1rc9`**
-
-- first pre-release
+  [Jopaul-John](https://github.com/Jopaul-John) - version `0.0.3` at 2022-07-20
+- breaking change on `smart_prom_nvme_smart_info` - version `0.0.2` at 2022-06-23
+- additional `smart_prom_scrape_iterations_total` metric - version `0.0.2` at 2022-06-23
+- first pre-release - pre-release version `0.0.1rc9` at 2022-06-20
 
 ## Special Thanks
 

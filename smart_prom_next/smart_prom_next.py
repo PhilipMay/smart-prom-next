@@ -157,7 +157,7 @@ def call_smartctl(options: List[str]) -> Tuple[str, int]:
                     print(f"DEBUG: Output of the first scraping iteration: result: {result}")
                 return result, returncode
             else:
-                raise Exception(
+                raise RuntimeError(
                     f"Calling {args} returned no result! "
                     f"returncode: {popen.returncode} stderr: '{stderr_text}'"
                 )

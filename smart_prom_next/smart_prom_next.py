@@ -16,11 +16,6 @@ from prometheus_client import Counter, Gauge, start_http_server
 from smart_prom_next.metric_wrapper import GaugeWrapper
 
 
-# Prometheus gauges
-# Do not access them directly!
-# Please use the appropriate get_xyz_gauge() functions.
-_SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
-
 # Counter how often the SMART values were scraped.
 SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
     "smart_prom_scrape_iterations_total", "Total number of SMART scrape iterations."
@@ -30,21 +25,10 @@ _SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _NVME_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _SCSI_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _TEMPERATURE_GAUGE: Optional[GaugeWrapper] = None
-_SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
+_SMART_STATUS_FAILED_GAUGE: Optional[GaugeWrapper] = None
+_SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[GaugeWrapper] = None
 
 first_scrape_interval: bool = True
-
-
-def get_smartctl_exit_status_gauge() -> Gauge:
-    """Lasy init of smartctl_exit_status_gauge."""
-    global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-    if _SMART_SMARTCTL_EXIT_STATUS_GAUGE is None:
-        _SMART_SMARTCTL_EXIT_STATUS_GAUGE = Gauge(
-            "smart_prom_smartctl_exit_status",
-            "exit status of the smartctl call",
-            ["device", "type", "model", "serial"],
-        )
-    return _SMART_SMARTCTL_EXIT_STATUS_GAUGE
 
 
 def normalize_str(the_str: str) -> str:
@@ -264,7 +248,7 @@ def scrape_metrics_for_device(
         "serial": serial_number,  # no normalization
     }
 
-    get_smartctl_exit_status_gauge().labels(**labels).set(returncode)
+    _SMART_SMARTCTL_EXIT_STATUS_GAUGE.set(value=returncode, **labels)
 
     scrape_smart_status(
         device_info=device_info,
@@ -357,6 +341,14 @@ def main() -> None:
     _SMART_STATUS_FAILED_GAUGE = Gauge(
         "smart_prom_smart_status_failed",
         "1 if SMART status check failed, otherwise 0",
+        ["device", "type", "model", "serial"],
+        smart_info_refresh_interval * 4,
+    )
+
+    global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
+    _SMART_SMARTCTL_EXIT_STATUS_GAUGE = Gauge(
+        "smart_prom_smartctl_exit_status",
+        "exit status of the smartctl call",
         ["device", "type", "model", "serial"],
         smart_info_refresh_interval * 4,
     )

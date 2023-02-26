@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Philip May
+# Copyright (c) 2022 - 2023 Philip May
 # This software is distributed under the terms of the MIT license
 # which is available at https://opensource.org/licenses/MIT
 
@@ -13,6 +13,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from prometheus_client import Counter, Gauge, start_http_server
 
+from smart_prom_next.metric_wrapper import GaugeWrapper
+
 
 # Prometheus gauges
 # Do not access them directly!
@@ -20,7 +22,6 @@ from prometheus_client import Counter, Gauge, start_http_server
 _TEMPERATURE_GAUGE: Optional[Gauge] = None
 _NVME_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SCSI_SMART_INFO_GAUGE: Optional[Gauge] = None
-_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
 
@@ -29,6 +30,7 @@ SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
     "smart_prom_scrape_iterations_total", "Total number of SMART scrape iterations."
 )
 
+_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 
 first_scrape_interval: bool = True
 
@@ -79,18 +81,6 @@ def get_nvme_smart_info_gauge() -> Gauge:
             ["device", "type", "model", "serial", "attr_name"],
         )
     return _NVME_SMART_INFO_GAUGE
-
-
-def get_smart_info_gauge() -> Gauge:
-    """Lasy init of smart_info_gauge."""
-    global _SMART_INFO_GAUGE
-    if _SMART_INFO_GAUGE is None:
-        _SMART_INFO_GAUGE = Gauge(
-            "smart_prom_smart_info",
-            "SMART health information log",
-            ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
-        )
-    return _SMART_INFO_GAUGE
 
 
 def get_scsi_smart_info_gauge() -> Gauge:
@@ -282,26 +272,28 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
                             # always call this without condition
                             for _when_failed_value in ["now", "past"]:
                                 gauge_value = 1 if _when_failed == _when_failed_value else 0
-                                get_smart_info_gauge().labels(
-                                    **sat_labels, attr_type=f"failed_{_when_failed_value}"
-                                ).set(gauge_value)
+                                _SMART_INFO_GAUGE.set(
+                                    value=gauge_value,
+                                    **sat_labels,
+                                    attr_type=f"failed_{_when_failed_value}",
+                                )
 
                             # read value, worst and thresh
                             for attr_type in ["value", "worst", "thresh"]:
                                 _value = smart_info_item.get(attr_type, None)
                                 if isinstance(_value, int):
-                                    get_smart_info_gauge().labels(
-                                        **sat_labels, attr_type=attr_type
-                                    ).set(_value)
+                                    _SMART_INFO_GAUGE.set(
+                                        value=_value, **sat_labels, attr_type=attr_type
+                                    )
 
                             # read raw value
                             _raw = smart_info_item.get("raw", None)
                             if isinstance(_raw, dict):
                                 _value = _raw.get("value", None)
                                 if isinstance(_value, int):
-                                    get_smart_info_gauge().labels(
-                                        **sat_labels, attr_type="raw"
-                                    ).set(_value)
+                                    _SMART_INFO_GAUGE.set(
+                                        value=_value, **sat_labels, attr_type="raw"
+                                    )
 
 
 def scrape_metrics_for_device(
@@ -375,6 +367,14 @@ def main() -> None:
     print(
         f"INFO: Enter metrics refresh loop. "
         f"smart_info_refresh_interval: {smart_info_refresh_interval}"
+    )
+
+    global _SMART_INFO_GAUGE
+    _SMART_INFO_GAUGE = GaugeWrapper(
+        "smart_prom_smart_info",
+        "SMART health information log",
+        ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
+        smart_info_refresh_interval * 4,
     )
 
     while True:

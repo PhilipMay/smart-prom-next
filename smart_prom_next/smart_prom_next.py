@@ -19,7 +19,6 @@ from smart_prom_next.metric_wrapper import GaugeWrapper
 # Prometheus gauges
 # Do not access them directly!
 # Please use the appropriate get_xyz_gauge() functions.
-_TEMPERATURE_GAUGE: Optional[Gauge] = None
 _SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
 
@@ -31,20 +30,9 @@ SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
 _SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _NVME_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _SCSI_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
+_TEMPERATURE_GAUGE: Optional[GaugeWrapper] = None
 
 first_scrape_interval: bool = True
-
-
-def get_temperature_gauge() -> Gauge:
-    """Lasy init of temperature_gauge."""
-    global _TEMPERATURE_GAUGE
-    if _TEMPERATURE_GAUGE is None:
-        _TEMPERATURE_GAUGE = Gauge(
-            "smart_prom_temperature",
-            "The temperature of a particular type.",
-            ["device", "type", "model", "serial", "temperature_type"],
-        )
-    return _TEMPERATURE_GAUGE
 
 
 def get_smart_status_failed_gauge() -> Gauge:
@@ -173,7 +161,7 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
             if isinstance(temperature_type, str) and isinstance(temperature_value, int):
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
-                get_temperature_gauge().labels(**temperature_labels).set(temperature_value)
+                _TEMPERATURE_GAUGE.set(value=temperature_value, **temperature_labels)
             else:
                 print(
                     f"WARNING: Temperature is present but cannot read the value! "
@@ -361,12 +349,18 @@ def main() -> None:
         smart_info_refresh_interval * 4,
     )
 
-    # get_scsi_smart_info_gauge
     global _SCSI_SMART_INFO_GAUGE
     _SCSI_SMART_INFO_GAUGE = Gauge(
         "smart_prom_scsi_smart_info",
         "scsi SMART health information log",
         ["device", "type", "model", "serial", "attr_name", "attr_type"],
+    )
+
+    global _TEMPERATURE_GAUGE
+    _TEMPERATURE_GAUGE = Gauge(
+        "smart_prom_temperature",
+        "The temperature of a particular type.",
+        ["device", "type", "model", "serial", "temperature_type"],
     )
 
     while True:

@@ -13,6 +13,7 @@ from prometheus_client import Gauge
 
 class GaugeWrapper:
     """Gauge wrapper with remove functionality."""
+
     def __init__(
         self,
         name: str,

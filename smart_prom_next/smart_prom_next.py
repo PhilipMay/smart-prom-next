@@ -357,6 +357,12 @@ def main() -> None:
         refresh_metrics()
         SCRAPE_ITERATIONS_COUNTER.inc()
         first_scrape_interval = False
+        _SMART_INFO_GAUGE.remove_old_metrics()
+        _NVME_SMART_INFO_GAUGE.remove_old_metrics()
+        _SCSI_SMART_INFO_GAUGE.remove_old_metrics()
+        _TEMPERATURE_GAUGE.remove_old_metrics()
+        _SMART_STATUS_FAILED_GAUGE.remove_old_metrics()
+        _SMART_SMARTCTL_EXIT_STATUS_GAUGE.remove_old_metrics()
         time.sleep(smart_info_refresh_interval)
 
 

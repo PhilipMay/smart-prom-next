@@ -17,6 +17,7 @@ from smart_prom_next.smart_prom_next import (
     scrape_scsi_metrics,
     scrape_smart_status,
     scrape_temperature,
+    init_metrics,
 )
 
 
@@ -40,6 +41,7 @@ def test_scrape_ata_metrics_failed_now():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -68,6 +70,7 @@ def test_scrape_ata_metrics_failed_past():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -96,6 +99,7 @@ def test_scrape_ata_metrics_value():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -124,6 +128,7 @@ def test_scrape_ata_metrics_raw():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -152,6 +157,7 @@ def test_scrape_temperature():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_temperature(
         device_info=device_info,
         labels=labels,
@@ -178,6 +184,7 @@ def test_scrape_smart_status():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_smart_status(
         device_info=device_info,
         labels=labels,
@@ -203,6 +210,7 @@ def test_scrape_nvme_metrics():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_nvme_metrics(
         device_info=device_info,
         labels=labels,
@@ -229,6 +237,7 @@ def test_scrape_scsi_metrics_write_str_as_float():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
@@ -256,6 +265,7 @@ def test_scrape_scsi_metrics_read_str_as_float():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
@@ -283,6 +293,7 @@ def test_scrape_scsi_metrics_read_int():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
@@ -303,6 +314,7 @@ def test_scrape_scsi_metrics_read_int():
 
 
 def test_scrape_metrics_for_device_nvme():
+    init_metrics(30)
     scrape_metrics_for_device(
         device_name="test_device",
         device_type="test_type",
@@ -380,6 +392,7 @@ def test_scrape_metrics_for_device_nvme():
 
 
 def test_scrape_metrics_for_device_ata():
+    init_metrics(30)
     scrape_metrics_for_device(
         device_name="test_device",
         device_type="test_type",
@@ -477,6 +490,7 @@ def test_scrape_metrics_for_device_ata():
 
 
 def test_scrape_metrics_for_device_scsi():
+    init_metrics(30)
     scrape_metrics_for_device(
         device_name="test_device",
         device_type="test_type",

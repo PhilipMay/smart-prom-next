@@ -290,21 +290,7 @@ def refresh_metrics() -> None:
             )
 
 
-def main() -> None:
-    """Main function."""
-    global first_scrape_interval
-    print("INFO: Start smart-prom-next.")
-
-    prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
-    print(f"INFO: Start prometheus client. port: {prometheus_client_port}")
-    start_http_server(prometheus_client_port)
-
-    smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
-    print(
-        f"INFO: Enter metrics refresh loop. "
-        f"smart_info_refresh_interval: {smart_info_refresh_interval}"
-    )
-
+def init_metrics(smart_info_refresh_interval):
     global _SMART_INFO_GAUGE
     _SMART_INFO_GAUGE = GaugeWrapper(
         "smart_prom_smart_info",
@@ -352,6 +338,24 @@ def main() -> None:
         ["device", "type", "model", "serial"],
         smart_info_refresh_interval * 4,
     )
+
+
+def main() -> None:
+    """Main function."""
+    global first_scrape_interval
+    print("INFO: Start smart-prom-next.")
+
+    prometheus_client_port = int(os.environ.get("PROMETHEUS_METRIC_PORT", 9902))
+    print(f"INFO: Start prometheus client. port: {prometheus_client_port}")
+    start_http_server(prometheus_client_port)
+
+    smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
+    print(
+        f"INFO: Enter metrics refresh loop. "
+        f"smart_info_refresh_interval: {smart_info_refresh_interval}"
+    )
+
+    init_metrics(smart_info_refresh_interval)
 
     while True:
         refresh_metrics()

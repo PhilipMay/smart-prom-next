@@ -10,6 +10,7 @@ from json_fixtures import ATA_FAILED_NOW, ATA_FAILED_PAST, NVME, SCSI
 from prometheus_client import REGISTRY
 
 from smart_prom_next.smart_prom_next import (
+    init_metrics,
     normalize_str,
     scrape_ata_metrics,
     scrape_metrics_for_device,
@@ -17,7 +18,6 @@ from smart_prom_next.smart_prom_next import (
     scrape_scsi_metrics,
     scrape_smart_status,
     scrape_temperature,
-    init_metrics,
 )
 
 

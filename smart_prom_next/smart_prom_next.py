@@ -20,7 +20,6 @@ from smart_prom_next.metric_wrapper import GaugeWrapper
 # Do not access them directly!
 # Please use the appropriate get_xyz_gauge() functions.
 _TEMPERATURE_GAUGE: Optional[Gauge] = None
-_NVME_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SCSI_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
@@ -31,6 +30,7 @@ SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
 )
 
 _SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
+_NVME_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 
 first_scrape_interval: bool = True
 
@@ -69,18 +69,6 @@ def get_smartctl_exit_status_gauge() -> Gauge:
             ["device", "type", "model", "serial"],
         )
     return _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-
-
-def get_nvme_smart_info_gauge() -> Gauge:
-    """Lasy init of nvme_smart_info_gauge."""
-    global _NVME_SMART_INFO_GAUGE
-    if _NVME_SMART_INFO_GAUGE is None:
-        _NVME_SMART_INFO_GAUGE = Gauge(
-            "smart_prom_nvme_smart_info",
-            "nvme SMART health information log",
-            ["device", "type", "model", "serial", "attr_name"],
-        )
-    return _NVME_SMART_INFO_GAUGE
 
 
 def get_scsi_smart_info_gauge() -> Gauge:
@@ -217,14 +205,14 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):
                             smart_info_labels = labels.copy()
                             smart_info_labels["attr_name"] = f"{smart_key}_{temp_sensor_nr}"
-                            get_nvme_smart_info_gauge().labels(**smart_info_labels).set(
-                                temp_sensor_value
+                            _NVME_SMART_INFO_GAUGE.set(
+                                value=temp_sensor_value, **smart_info_labels
                             )
                 else:
                     if isinstance(smart_value, int):
                         smart_info_labels = labels.copy()
                         smart_info_labels["attr_name"] = smart_key
-                        get_nvme_smart_info_gauge().labels(**smart_info_labels).set(smart_value)
+                        _NVME_SMART_INFO_GAUGE.set(value=smart_value, **smart_info_labels)
 
 
 def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -374,6 +362,14 @@ def main() -> None:
         "smart_prom_smart_info",
         "SMART health information log",
         ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
+        smart_info_refresh_interval * 4,
+    )
+
+    global _NVME_SMART_INFO_GAUGE
+    _NVME_SMART_INFO_GAUGE = GaugeWrapper(
+        "smart_prom_nvme_smart_info",
+        "nvme SMART health information log",
+        ["device", "type", "model", "serial", "attr_name"],
         smart_info_refresh_interval * 4,
     )
 

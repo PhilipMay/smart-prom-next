@@ -20,7 +20,6 @@ from smart_prom_next.metric_wrapper import GaugeWrapper
 # Do not access them directly!
 # Please use the appropriate get_xyz_gauge() functions.
 _TEMPERATURE_GAUGE: Optional[Gauge] = None
-_SCSI_SMART_INFO_GAUGE: Optional[Gauge] = None
 _SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
 
@@ -31,6 +30,7 @@ SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
 
 _SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _NVME_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
+_SCSI_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 
 first_scrape_interval: bool = True
 
@@ -69,18 +69,6 @@ def get_smartctl_exit_status_gauge() -> Gauge:
             ["device", "type", "model", "serial"],
         )
     return _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-
-
-def get_scsi_smart_info_gauge() -> Gauge:
-    """Lasy init of scsi_smart_info_gauge."""
-    global _SCSI_SMART_INFO_GAUGE
-    if _SCSI_SMART_INFO_GAUGE is None:
-        _SCSI_SMART_INFO_GAUGE = Gauge(
-            "smart_prom_scsi_smart_info",
-            "scsi SMART health information log",
-            ["device", "type", "model", "serial", "attr_name", "attr_type"],
-        )
-    return _SCSI_SMART_INFO_GAUGE
 
 
 def normalize_str(the_str: str) -> str:
@@ -232,7 +220,7 @@ def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         smart_info_labels = labels.copy()
                         smart_info_labels["attr_name"] = attr_name
                         smart_info_labels["attr_type"] = attr_type
-                        get_scsi_smart_info_gauge().labels(**smart_info_labels).set(value)
+                        _SCSI_SMART_INFO_GAUGE.set(value=value, **smart_info_labels)
 
 
 def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -371,6 +359,14 @@ def main() -> None:
         "nvme SMART health information log",
         ["device", "type", "model", "serial", "attr_name"],
         smart_info_refresh_interval * 4,
+    )
+
+    # get_scsi_smart_info_gauge
+    global _SCSI_SMART_INFO_GAUGE
+    _SCSI_SMART_INFO_GAUGE = Gauge(
+        "smart_prom_scsi_smart_info",
+        "scsi SMART health information log",
+        ["device", "type", "model", "serial", "attr_name", "attr_type"],
     )
 
     while True:

@@ -322,7 +322,7 @@ def main() -> None:
     )
 
     global _SCSI_SMART_INFO_GAUGE
-    _SCSI_SMART_INFO_GAUGE = Gauge(
+    _SCSI_SMART_INFO_GAUGE = GaugeWrapper(
         "smart_prom_scsi_smart_info",
         "scsi SMART health information log",
         ["device", "type", "model", "serial", "attr_name", "attr_type"],
@@ -330,7 +330,7 @@ def main() -> None:
     )
 
     global _TEMPERATURE_GAUGE
-    _TEMPERATURE_GAUGE = Gauge(
+    _TEMPERATURE_GAUGE = GaugeWrapper(
         "smart_prom_temperature",
         "The temperature of a particular type.",
         ["device", "type", "model", "serial", "temperature_type"],
@@ -338,7 +338,7 @@ def main() -> None:
     )
 
     global _SMART_STATUS_FAILED_GAUGE
-    _SMART_STATUS_FAILED_GAUGE = Gauge(
+    _SMART_STATUS_FAILED_GAUGE = GaugeWrapper(
         "smart_prom_smart_status_failed",
         "1 if SMART status check failed, otherwise 0",
         ["device", "type", "model", "serial"],
@@ -346,7 +346,7 @@ def main() -> None:
     )
 
     global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-    _SMART_SMARTCTL_EXIT_STATUS_GAUGE = Gauge(
+    _SMART_SMARTCTL_EXIT_STATUS_GAUGE = GaugeWrapper(
         "smart_prom_smartctl_exit_status",
         "exit status of the smartctl call",
         ["device", "type", "model", "serial"],

@@ -11,7 +11,7 @@ import time
 from subprocess import PIPE, Popen
 from typing import Any, Dict, List, Optional, Tuple
 
-from prometheus_client import Counter, Gauge, start_http_server
+from prometheus_client import Counter, start_http_server
 
 from smart_prom_next.metric_wrapper import GaugeWrapper
 

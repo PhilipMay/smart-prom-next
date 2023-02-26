@@ -19,7 +19,6 @@ from smart_prom_next.metric_wrapper import GaugeWrapper
 # Prometheus gauges
 # Do not access them directly!
 # Please use the appropriate get_xyz_gauge() functions.
-_SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
 
 # Counter how often the SMART values were scraped.
@@ -31,20 +30,9 @@ _SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _NVME_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _SCSI_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
 _TEMPERATURE_GAUGE: Optional[GaugeWrapper] = None
+_SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
 
 first_scrape_interval: bool = True
-
-
-def get_smart_status_failed_gauge() -> Gauge:
-    """Lasy init of smart_status_failed_gauge."""
-    global _SMART_STATUS_FAILED_GAUGE
-    if _SMART_STATUS_FAILED_GAUGE is None:
-        _SMART_STATUS_FAILED_GAUGE = Gauge(
-            "smart_prom_smart_status_failed",
-            "1 if SMART status check failed, otherwise 0",
-            ["device", "type", "model", "serial"],
-        )
-    return _SMART_STATUS_FAILED_GAUGE
 
 
 def get_smartctl_exit_status_gauge() -> Gauge:
@@ -145,7 +133,7 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
         smart_status_passed = smart_status.get("passed", None)
         if isinstance(smart_status_passed, bool):
             smart_status_failed_value = 0 if smart_status_passed else 1
-            get_smart_status_failed_gauge().labels(**labels).set(smart_status_failed_value)
+            _SMART_STATUS_FAILED_GAUGE.set(value=smart_status_failed_value, **labels)
         else:
             print(
                 f"WARNING: SMART status is present but cannot read the value! "
@@ -354,6 +342,7 @@ def main() -> None:
         "smart_prom_scsi_smart_info",
         "scsi SMART health information log",
         ["device", "type", "model", "serial", "attr_name", "attr_type"],
+        smart_info_refresh_interval * 4,
     )
 
     global _TEMPERATURE_GAUGE
@@ -361,6 +350,15 @@ def main() -> None:
         "smart_prom_temperature",
         "The temperature of a particular type.",
         ["device", "type", "model", "serial", "temperature_type"],
+        smart_info_refresh_interval * 4,
+    )
+
+    global _SMART_STATUS_FAILED_GAUGE
+    _SMART_STATUS_FAILED_GAUGE = Gauge(
+        "smart_prom_smart_status_failed",
+        "1 if SMART status check failed, otherwise 0",
+        ["device", "type", "model", "serial"],
+        smart_info_refresh_interval * 4,
     )
 
     while True:

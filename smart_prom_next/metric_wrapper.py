@@ -40,6 +40,6 @@ class GaugeWrapper:
         if len(labelkwargs) != len(self._labelnames):
             raise ValueError("Incorrect label count")
         self._gauge.labels(**labelkwargs).set(value)
-        metric_key = tuple(str(labelkwargs[l]) for l in self._labelnames)
+        metric_key = tuple(str(labelkwargs[labelname]) for labelname in self._labelnames)
         self._metric_to_age[metric_key] = time.time()
         self.remove_old_metrics()

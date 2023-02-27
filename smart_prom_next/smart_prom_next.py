@@ -29,6 +29,7 @@ _SMART_STATUS_FAILED_GAUGE: Optional[GaugeWrapper] = None
 _SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[GaugeWrapper] = None
 
 first_scrape_interval: bool = True
+init_metrics_done: bool = False
 
 
 def normalize_str(the_str: str) -> str:
@@ -291,53 +292,56 @@ def refresh_metrics() -> None:
 
 
 def init_metrics(smart_info_refresh_interval):
-    global _SMART_INFO_GAUGE
-    _SMART_INFO_GAUGE = GaugeWrapper(
-        "smart_prom_smart_info",
-        "SMART health information log",
-        ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
-        smart_info_refresh_interval * 4,
-    )
+    global init_metrics_done
+    if not init_metrics_done:
+        init_metrics_done = True
+        global _SMART_INFO_GAUGE
+        _SMART_INFO_GAUGE = GaugeWrapper(
+            "smart_prom_smart_info",
+            "SMART health information log",
+            ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
+            smart_info_refresh_interval * 4,
+        )
 
-    global _NVME_SMART_INFO_GAUGE
-    _NVME_SMART_INFO_GAUGE = GaugeWrapper(
-        "smart_prom_nvme_smart_info",
-        "nvme SMART health information log",
-        ["device", "type", "model", "serial", "attr_name"],
-        smart_info_refresh_interval * 4,
-    )
+        global _NVME_SMART_INFO_GAUGE
+        _NVME_SMART_INFO_GAUGE = GaugeWrapper(
+            "smart_prom_nvme_smart_info",
+            "nvme SMART health information log",
+            ["device", "type", "model", "serial", "attr_name"],
+            smart_info_refresh_interval * 4,
+        )
 
-    global _SCSI_SMART_INFO_GAUGE
-    _SCSI_SMART_INFO_GAUGE = GaugeWrapper(
-        "smart_prom_scsi_smart_info",
-        "scsi SMART health information log",
-        ["device", "type", "model", "serial", "attr_name", "attr_type"],
-        smart_info_refresh_interval * 4,
-    )
+        global _SCSI_SMART_INFO_GAUGE
+        _SCSI_SMART_INFO_GAUGE = GaugeWrapper(
+            "smart_prom_scsi_smart_info",
+            "scsi SMART health information log",
+            ["device", "type", "model", "serial", "attr_name", "attr_type"],
+            smart_info_refresh_interval * 4,
+        )
 
-    global _TEMPERATURE_GAUGE
-    _TEMPERATURE_GAUGE = GaugeWrapper(
-        "smart_prom_temperature",
-        "The temperature of a particular type.",
-        ["device", "type", "model", "serial", "temperature_type"],
-        smart_info_refresh_interval * 4,
-    )
+        global _TEMPERATURE_GAUGE
+        _TEMPERATURE_GAUGE = GaugeWrapper(
+            "smart_prom_temperature",
+            "The temperature of a particular type.",
+            ["device", "type", "model", "serial", "temperature_type"],
+            smart_info_refresh_interval * 4,
+        )
 
-    global _SMART_STATUS_FAILED_GAUGE
-    _SMART_STATUS_FAILED_GAUGE = GaugeWrapper(
-        "smart_prom_smart_status_failed",
-        "1 if SMART status check failed, otherwise 0",
-        ["device", "type", "model", "serial"],
-        smart_info_refresh_interval * 4,
-    )
+        global _SMART_STATUS_FAILED_GAUGE
+        _SMART_STATUS_FAILED_GAUGE = GaugeWrapper(
+            "smart_prom_smart_status_failed",
+            "1 if SMART status check failed, otherwise 0",
+            ["device", "type", "model", "serial"],
+            smart_info_refresh_interval * 4,
+        )
 
-    global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-    _SMART_SMARTCTL_EXIT_STATUS_GAUGE = GaugeWrapper(
-        "smart_prom_smartctl_exit_status",
-        "exit status of the smartctl call",
-        ["device", "type", "model", "serial"],
-        smart_info_refresh_interval * 4,
-    )
+        global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
+        _SMART_SMARTCTL_EXIT_STATUS_GAUGE = GaugeWrapper(
+            "smart_prom_smartctl_exit_status",
+            "exit status of the smartctl call",
+            ["device", "type", "model", "serial"],
+            smart_info_refresh_interval * 4,
+        )
 
 
 def main() -> None:

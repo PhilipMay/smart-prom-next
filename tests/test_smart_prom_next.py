@@ -2,7 +2,6 @@
 # This software is distributed under the terms of the MIT license
 # which is available at https://opensource.org/licenses/MIT
 
-
 import json
 from math import isclose
 

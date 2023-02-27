@@ -292,6 +292,7 @@ def refresh_metrics() -> None:
 
 
 def init_metrics(smart_info_refresh_interval):
+    """Init the metrics."""
     global init_metrics_done
     if not init_metrics_done:
         init_metrics_done = True

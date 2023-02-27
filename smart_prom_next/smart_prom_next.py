@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Philip May
+# Copyright (c) 2022 - 2023 Philip May
 # This software is distributed under the terms of the MIT license
 # which is available at https://opensource.org/licenses/MIT
 
@@ -9,100 +9,20 @@ import os
 import sys
 import time
 from subprocess import PIPE, Popen
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
-from prometheus_client import Counter, Gauge, start_http_server
+from prometheus_client import Counter, start_http_server
 
+from smart_prom_next.metric_wrapper import GaugeWrapper
 
-# Prometheus gauges
-# Do not access them directly!
-# Please use the appropriate get_xyz_gauge() functions.
-_TEMPERATURE_GAUGE: Optional[Gauge] = None
-_NVME_SMART_INFO_GAUGE: Optional[Gauge] = None
-_SCSI_SMART_INFO_GAUGE: Optional[Gauge] = None
-_SMART_INFO_GAUGE: Optional[Gauge] = None
-_SMART_STATUS_FAILED_GAUGE: Optional[Gauge] = None
-_SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[Gauge] = None
 
 # Counter how often the SMART values were scraped.
 SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
     "smart_prom_scrape_iterations_total", "Total number of SMART scrape iterations."
 )
 
-
 first_scrape_interval: bool = True
-
-
-def get_temperature_gauge() -> Gauge:
-    """Lasy init of temperature_gauge."""
-    global _TEMPERATURE_GAUGE
-    if _TEMPERATURE_GAUGE is None:
-        _TEMPERATURE_GAUGE = Gauge(
-            "smart_prom_temperature",
-            "The temperature of a particular type.",
-            ["device", "type", "model", "serial", "temperature_type"],
-        )
-    return _TEMPERATURE_GAUGE
-
-
-def get_smart_status_failed_gauge() -> Gauge:
-    """Lasy init of smart_status_failed_gauge."""
-    global _SMART_STATUS_FAILED_GAUGE
-    if _SMART_STATUS_FAILED_GAUGE is None:
-        _SMART_STATUS_FAILED_GAUGE = Gauge(
-            "smart_prom_smart_status_failed",
-            "1 if SMART status check failed, otherwise 0",
-            ["device", "type", "model", "serial"],
-        )
-    return _SMART_STATUS_FAILED_GAUGE
-
-
-def get_smartctl_exit_status_gauge() -> Gauge:
-    """Lasy init of smartctl_exit_status_gauge."""
-    global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-    if _SMART_SMARTCTL_EXIT_STATUS_GAUGE is None:
-        _SMART_SMARTCTL_EXIT_STATUS_GAUGE = Gauge(
-            "smart_prom_smartctl_exit_status",
-            "exit status of the smartctl call",
-            ["device", "type", "model", "serial"],
-        )
-    return _SMART_SMARTCTL_EXIT_STATUS_GAUGE
-
-
-def get_nvme_smart_info_gauge() -> Gauge:
-    """Lasy init of nvme_smart_info_gauge."""
-    global _NVME_SMART_INFO_GAUGE
-    if _NVME_SMART_INFO_GAUGE is None:
-        _NVME_SMART_INFO_GAUGE = Gauge(
-            "smart_prom_nvme_smart_info",
-            "nvme SMART health information log",
-            ["device", "type", "model", "serial", "attr_name"],
-        )
-    return _NVME_SMART_INFO_GAUGE
-
-
-def get_smart_info_gauge() -> Gauge:
-    """Lasy init of smart_info_gauge."""
-    global _SMART_INFO_GAUGE
-    if _SMART_INFO_GAUGE is None:
-        _SMART_INFO_GAUGE = Gauge(
-            "smart_prom_smart_info",
-            "SMART health information log",
-            ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
-        )
-    return _SMART_INFO_GAUGE
-
-
-def get_scsi_smart_info_gauge() -> Gauge:
-    """Lasy init of scsi_smart_info_gauge."""
-    global _SCSI_SMART_INFO_GAUGE
-    if _SCSI_SMART_INFO_GAUGE is None:
-        _SCSI_SMART_INFO_GAUGE = Gauge(
-            "smart_prom_scsi_smart_info",
-            "scsi SMART health information log",
-            ["device", "type", "model", "serial", "attr_name", "attr_type"],
-        )
-    return _SCSI_SMART_INFO_GAUGE
+init_metrics_done: bool = False
 
 
 def normalize_str(the_str: str) -> str:
@@ -191,7 +111,9 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
         smart_status_passed = smart_status.get("passed", None)
         if isinstance(smart_status_passed, bool):
             smart_status_failed_value = 0 if smart_status_passed else 1
-            get_smart_status_failed_gauge().labels(**labels).set(smart_status_failed_value)
+            _SMART_STATUS_FAILED_GAUGE.set(  # type: ignore
+                value=smart_status_failed_value, **labels
+            )
         else:
             print(
                 f"WARNING: SMART status is present but cannot read the value! "
@@ -207,7 +129,9 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
             if isinstance(temperature_type, str) and isinstance(temperature_value, int):
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
-                get_temperature_gauge().labels(**temperature_labels).set(temperature_value)
+                _TEMPERATURE_GAUGE.set(  # type: ignore
+                    value=temperature_value, **temperature_labels
+                )
             else:
                 print(
                     f"WARNING: Temperature is present but cannot read the value! "
@@ -227,14 +151,16 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):
                             smart_info_labels = labels.copy()
                             smart_info_labels["attr_name"] = f"{smart_key}_{temp_sensor_nr}"
-                            get_nvme_smart_info_gauge().labels(**smart_info_labels).set(
-                                temp_sensor_value
+                            _NVME_SMART_INFO_GAUGE.set(  # type: ignore
+                                value=temp_sensor_value, **smart_info_labels
                             )
                 else:
                     if isinstance(smart_value, int):
                         smart_info_labels = labels.copy()
                         smart_info_labels["attr_name"] = smart_key
-                        get_nvme_smart_info_gauge().labels(**smart_info_labels).set(smart_value)
+                        _NVME_SMART_INFO_GAUGE.set(  # type: ignore
+                            value=smart_value, **smart_info_labels
+                        )
 
 
 def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -254,7 +180,9 @@ def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         smart_info_labels = labels.copy()
                         smart_info_labels["attr_name"] = attr_name
                         smart_info_labels["attr_type"] = attr_type
-                        get_scsi_smart_info_gauge().labels(**smart_info_labels).set(value)
+                        _SCSI_SMART_INFO_GAUGE.set(  # type: ignore
+                            value=value, **smart_info_labels
+                        )
 
 
 def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -282,26 +210,28 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
                             # always call this without condition
                             for _when_failed_value in ["now", "past"]:
                                 gauge_value = 1 if _when_failed == _when_failed_value else 0
-                                get_smart_info_gauge().labels(
-                                    **sat_labels, attr_type=f"failed_{_when_failed_value}"
-                                ).set(gauge_value)
+                                _SMART_INFO_GAUGE.set(  # type: ignore
+                                    value=gauge_value,
+                                    **sat_labels,
+                                    attr_type=f"failed_{_when_failed_value}",
+                                )
 
                             # read value, worst and thresh
                             for attr_type in ["value", "worst", "thresh"]:
                                 _value = smart_info_item.get(attr_type, None)
                                 if isinstance(_value, int):
-                                    get_smart_info_gauge().labels(
-                                        **sat_labels, attr_type=attr_type
-                                    ).set(_value)
+                                    _SMART_INFO_GAUGE.set(  # type: ignore
+                                        value=_value, **sat_labels, attr_type=attr_type
+                                    )
 
                             # read raw value
                             _raw = smart_info_item.get("raw", None)
                             if isinstance(_raw, dict):
                                 _value = _raw.get("value", None)
                                 if isinstance(_value, int):
-                                    get_smart_info_gauge().labels(
-                                        **sat_labels, attr_type="raw"
-                                    ).set(_value)
+                                    _SMART_INFO_GAUGE.set(  # type: ignore
+                                        value=_value, **sat_labels, attr_type="raw"
+                                    )
 
 
 def scrape_metrics_for_device(
@@ -320,7 +250,7 @@ def scrape_metrics_for_device(
         "serial": serial_number,  # no normalization
     }
 
-    get_smartctl_exit_status_gauge().labels(**labels).set(returncode)
+    _SMART_SMARTCTL_EXIT_STATUS_GAUGE.set(value=returncode, **labels)  # type: ignore
 
     scrape_smart_status(
         device_info=device_info,
@@ -362,6 +292,60 @@ def refresh_metrics() -> None:
             )
 
 
+def init_metrics(smart_info_refresh_interval):
+    """Init the metrics."""
+    global init_metrics_done
+    if not init_metrics_done:
+        init_metrics_done = True
+        global _SMART_INFO_GAUGE
+        _SMART_INFO_GAUGE = GaugeWrapper(
+            "smart_prom_smart_info",
+            "SMART health information log",
+            ["device", "type", "model", "serial", "attr_name", "attr_type", "attr_id"],
+            smart_info_refresh_interval * 4,
+        )
+
+        global _NVME_SMART_INFO_GAUGE
+        _NVME_SMART_INFO_GAUGE = GaugeWrapper(
+            "smart_prom_nvme_smart_info",
+            "nvme SMART health information log",
+            ["device", "type", "model", "serial", "attr_name"],
+            smart_info_refresh_interval * 4,
+        )
+
+        global _SCSI_SMART_INFO_GAUGE
+        _SCSI_SMART_INFO_GAUGE = GaugeWrapper(
+            "smart_prom_scsi_smart_info",
+            "scsi SMART health information log",
+            ["device", "type", "model", "serial", "attr_name", "attr_type"],
+            smart_info_refresh_interval * 4,
+        )
+
+        global _TEMPERATURE_GAUGE
+        _TEMPERATURE_GAUGE = GaugeWrapper(
+            "smart_prom_temperature",
+            "The temperature of a particular type.",
+            ["device", "type", "model", "serial", "temperature_type"],
+            smart_info_refresh_interval * 4,
+        )
+
+        global _SMART_STATUS_FAILED_GAUGE
+        _SMART_STATUS_FAILED_GAUGE = GaugeWrapper(
+            "smart_prom_smart_status_failed",
+            "1 if SMART status check failed, otherwise 0",
+            ["device", "type", "model", "serial"],
+            smart_info_refresh_interval * 4,
+        )
+
+        global _SMART_SMARTCTL_EXIT_STATUS_GAUGE
+        _SMART_SMARTCTL_EXIT_STATUS_GAUGE = GaugeWrapper(
+            "smart_prom_smartctl_exit_status",
+            "exit status of the smartctl call",
+            ["device", "type", "model", "serial"],
+            smart_info_refresh_interval * 4,
+        )
+
+
 def main() -> None:
     """Main function."""
     global first_scrape_interval
@@ -377,10 +361,18 @@ def main() -> None:
         f"smart_info_refresh_interval: {smart_info_refresh_interval}"
     )
 
+    init_metrics(smart_info_refresh_interval)
+
     while True:
         refresh_metrics()
         SCRAPE_ITERATIONS_COUNTER.inc()
         first_scrape_interval = False
+        _SMART_INFO_GAUGE.remove_old_metrics()  # type: ignore
+        _NVME_SMART_INFO_GAUGE.remove_old_metrics()  # type: ignore
+        _SCSI_SMART_INFO_GAUGE.remove_old_metrics()  # type: ignore
+        _TEMPERATURE_GAUGE.remove_old_metrics()  # type: ignore
+        _SMART_STATUS_FAILED_GAUGE.remove_old_metrics()  # type: ignore
+        _SMART_SMARTCTL_EXIT_STATUS_GAUGE.remove_old_metrics()  # type: ignore
         time.sleep(smart_info_refresh_interval)
 
 

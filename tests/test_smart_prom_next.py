@@ -1,7 +1,6 @@
-# Copyright (c) 2022 Philip May
+# Copyright (c) 2022 - 2023 Philip May
 # This software is distributed under the terms of the MIT license
 # which is available at https://opensource.org/licenses/MIT
-
 
 import json
 from math import isclose
@@ -10,6 +9,7 @@ from json_fixtures import ATA_FAILED_NOW, ATA_FAILED_PAST, NVME, SCSI
 from prometheus_client import REGISTRY
 
 from smart_prom_next.smart_prom_next import (
+    init_metrics,
     normalize_str,
     scrape_ata_metrics,
     scrape_metrics_for_device,
@@ -40,6 +40,7 @@ def test_scrape_ata_metrics_failed_now():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -68,6 +69,7 @@ def test_scrape_ata_metrics_failed_past():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -96,6 +98,7 @@ def test_scrape_ata_metrics_value():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -124,6 +127,7 @@ def test_scrape_ata_metrics_raw():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_ata_metrics(
         device_info=device_info,
         labels=labels,
@@ -152,6 +156,7 @@ def test_scrape_temperature():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_temperature(
         device_info=device_info,
         labels=labels,
@@ -178,6 +183,7 @@ def test_scrape_smart_status():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_smart_status(
         device_info=device_info,
         labels=labels,
@@ -203,6 +209,7 @@ def test_scrape_nvme_metrics():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_nvme_metrics(
         device_info=device_info,
         labels=labels,
@@ -229,6 +236,7 @@ def test_scrape_scsi_metrics_write_str_as_float():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
@@ -256,6 +264,7 @@ def test_scrape_scsi_metrics_read_str_as_float():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
@@ -283,6 +292,7 @@ def test_scrape_scsi_metrics_read_int():
         "model": "test_model",
         "serial": "test_serial_number",
     }
+    init_metrics(30)
     scrape_scsi_metrics(
         device_info=device_info,
         labels=labels,
@@ -303,6 +313,7 @@ def test_scrape_scsi_metrics_read_int():
 
 
 def test_scrape_metrics_for_device_nvme():
+    init_metrics(30)
     scrape_metrics_for_device(
         device_name="test_device",
         device_type="test_type",
@@ -380,6 +391,7 @@ def test_scrape_metrics_for_device_nvme():
 
 
 def test_scrape_metrics_for_device_ata():
+    init_metrics(30)
     scrape_metrics_for_device(
         device_name="test_device",
         device_type="test_type",
@@ -477,6 +489,7 @@ def test_scrape_metrics_for_device_ata():
 
 
 def test_scrape_metrics_for_device_scsi():
+    init_metrics(30)
     scrape_metrics_for_device(
         device_name="test_device",
         device_type="test_type",

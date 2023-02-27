@@ -111,7 +111,9 @@ def scrape_smart_status(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
         smart_status_passed = smart_status.get("passed", None)
         if isinstance(smart_status_passed, bool):
             smart_status_failed_value = 0 if smart_status_passed else 1
-            _SMART_STATUS_FAILED_GAUGE.set(value=smart_status_failed_value, **labels)
+            _SMART_STATUS_FAILED_GAUGE.set(  # type: ignore
+                value=smart_status_failed_value, **labels
+            )
         else:
             print(
                 f"WARNING: SMART status is present but cannot read the value! "
@@ -127,7 +129,9 @@ def scrape_temperature(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
             if isinstance(temperature_type, str) and isinstance(temperature_value, int):
                 temperature_labels = labels.copy()  # copy so we do not change labels
                 temperature_labels["temperature_type"] = normalize_str(temperature_type)
-                _TEMPERATURE_GAUGE.set(value=temperature_value, **temperature_labels)
+                _TEMPERATURE_GAUGE.set(  # type: ignore
+                    value=temperature_value, **temperature_labels
+                )
             else:
                 print(
                     f"WARNING: Temperature is present but cannot read the value! "
@@ -147,14 +151,16 @@ def scrape_nvme_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         for temp_sensor_nr, temp_sensor_value in enumerate(smart_value, start=1):
                             smart_info_labels = labels.copy()
                             smart_info_labels["attr_name"] = f"{smart_key}_{temp_sensor_nr}"
-                            _NVME_SMART_INFO_GAUGE.set(
+                            _NVME_SMART_INFO_GAUGE.set(  # type: ignore
                                 value=temp_sensor_value, **smart_info_labels
                             )
                 else:
                     if isinstance(smart_value, int):
                         smart_info_labels = labels.copy()
                         smart_info_labels["attr_name"] = smart_key
-                        _NVME_SMART_INFO_GAUGE.set(value=smart_value, **smart_info_labels)
+                        _NVME_SMART_INFO_GAUGE.set(  # type: ignore
+                            value=smart_value, **smart_info_labels
+                        )
 
 
 def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -174,7 +180,9 @@ def scrape_scsi_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> 
                         smart_info_labels = labels.copy()
                         smart_info_labels["attr_name"] = attr_name
                         smart_info_labels["attr_type"] = attr_type
-                        _SCSI_SMART_INFO_GAUGE.set(value=value, **smart_info_labels)
+                        _SCSI_SMART_INFO_GAUGE.set(  # type: ignore
+                            value=value, **smart_info_labels
+                        )
 
 
 def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> None:
@@ -202,7 +210,7 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
                             # always call this without condition
                             for _when_failed_value in ["now", "past"]:
                                 gauge_value = 1 if _when_failed == _when_failed_value else 0
-                                _SMART_INFO_GAUGE.set(
+                                _SMART_INFO_GAUGE.set(  # type: ignore
                                     value=gauge_value,
                                     **sat_labels,
                                     attr_type=f"failed_{_when_failed_value}",
@@ -212,7 +220,7 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
                             for attr_type in ["value", "worst", "thresh"]:
                                 _value = smart_info_item.get(attr_type, None)
                                 if isinstance(_value, int):
-                                    _SMART_INFO_GAUGE.set(
+                                    _SMART_INFO_GAUGE.set(  # type: ignore
                                         value=_value, **sat_labels, attr_type=attr_type
                                     )
 
@@ -221,7 +229,7 @@ def scrape_ata_metrics(device_info: Dict[str, Any], labels: Dict[str, str]) -> N
                             if isinstance(_raw, dict):
                                 _value = _raw.get("value", None)
                                 if isinstance(_value, int):
-                                    _SMART_INFO_GAUGE.set(
+                                    _SMART_INFO_GAUGE.set(  # type: ignore
                                         value=_value, **sat_labels, attr_type="raw"
                                     )
 
@@ -242,7 +250,7 @@ def scrape_metrics_for_device(
         "serial": serial_number,  # no normalization
     }
 
-    _SMART_SMARTCTL_EXIT_STATUS_GAUGE.set(value=returncode, **labels)
+    _SMART_SMARTCTL_EXIT_STATUS_GAUGE.set(value=returncode, **labels)  # type: ignore
 
     scrape_smart_status(
         device_info=device_info,
@@ -359,12 +367,12 @@ def main() -> None:
         refresh_metrics()
         SCRAPE_ITERATIONS_COUNTER.inc()
         first_scrape_interval = False
-        _SMART_INFO_GAUGE.remove_old_metrics()
-        _NVME_SMART_INFO_GAUGE.remove_old_metrics()
-        _SCSI_SMART_INFO_GAUGE.remove_old_metrics()
-        _TEMPERATURE_GAUGE.remove_old_metrics()
-        _SMART_STATUS_FAILED_GAUGE.remove_old_metrics()
-        _SMART_SMARTCTL_EXIT_STATUS_GAUGE.remove_old_metrics()
+        _SMART_INFO_GAUGE.remove_old_metrics()  # type: ignore
+        _NVME_SMART_INFO_GAUGE.remove_old_metrics()  # type: ignore
+        _SCSI_SMART_INFO_GAUGE.remove_old_metrics()  # type: ignore
+        _TEMPERATURE_GAUGE.remove_old_metrics()  # type: ignore
+        _SMART_STATUS_FAILED_GAUGE.remove_old_metrics()  # type: ignore
+        _SMART_SMARTCTL_EXIT_STATUS_GAUGE.remove_old_metrics()  # type: ignore
         time.sleep(smart_info_refresh_interval)
 
 

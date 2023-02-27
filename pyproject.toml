@@ -26,4 +26,5 @@ disable = [
     "too-many-nested-blocks",
     "no-else-return",
     "global-statement",
+    "global-variable-undefined",
 ]

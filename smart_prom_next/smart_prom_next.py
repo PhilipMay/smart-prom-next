@@ -21,13 +21,6 @@ SCRAPE_ITERATIONS_COUNTER: Counter = Counter(
     "smart_prom_scrape_iterations_total", "Total number of SMART scrape iterations."
 )
 
-_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
-_NVME_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
-_SCSI_SMART_INFO_GAUGE: Optional[GaugeWrapper] = None
-_TEMPERATURE_GAUGE: Optional[GaugeWrapper] = None
-_SMART_STATUS_FAILED_GAUGE: Optional[GaugeWrapper] = None
-_SMART_SMARTCTL_EXIT_STATUS_GAUGE: Optional[GaugeWrapper] = None
-
 first_scrape_interval: bool = True
 init_metrics_done: bool = False
 

@@ -9,7 +9,7 @@ import os
 import sys
 import time
 from subprocess import PIPE, Popen
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 from prometheus_client import Counter, start_http_server
 

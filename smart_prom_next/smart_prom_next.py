@@ -356,12 +356,13 @@ def main() -> None:
     start_http_server(prometheus_client_port)
 
     smart_info_refresh_interval = int(os.environ.get("SMART_INFO_READ_INTERVAL_SECONDS", 60))
-    print(
-        f"INFO: Enter metrics refresh loop. "
-        f"smart_info_refresh_interval: {smart_info_refresh_interval}"
-    )
 
     init_metrics(smart_info_refresh_interval)
+
+    print(
+        "INFO: Enter metrics refresh loop. "
+        f"smart_info_refresh_interval: {smart_info_refresh_interval}"
+    )
 
     while True:
         refresh_metrics()
